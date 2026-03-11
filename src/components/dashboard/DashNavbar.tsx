@@ -252,7 +252,7 @@ export default function DashNavbar({
                       <div className="border border-gray-200 rounded-xl bg-white overflow-hidden">
                         
                         <div className="flex items-center justify-between p-3 border-b border-gray-100">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 pr-4">
                             <div className="w-9 h-9 rounded-xl bg-[#F8F9FA] flex items-center justify-center shrink-0">
                               <FastForward size={18} className="text-[#042BFD]" strokeWidth={1.5} />
                             </div>
@@ -261,16 +261,26 @@ export default function DashNavbar({
                               <p className="text-[11px] text-gray-500">Autopayout occurs at the end of each month.</p>
                             </div>
                           </div>
-                          <div 
-                            onClick={() => isEditing && setAutoPayout(!autoPayout)}
-                            className={`w-10 h-[22px] rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 ${isEditing ? 'cursor-pointer' : 'cursor-default opacity-80'} ${autoPayout ? 'bg-[#042BFD]' : 'bg-gray-200'}`}
-                          >
-                            <div className={`w-[18px] h-[18px] bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out ${autoPayout ? 'translate-x-[18px]' : 'translate-x-0'}`} />
-                          </div>
+                          
+                          {/* Toggle Logic: Show Switch if Editing, Badge if Not */}
+                          {isEditing ? (
+                            <div 
+                              onClick={() => setAutoPayout(!autoPayout)}
+                              className={`w-10 h-[22px] rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 cursor-pointer ${autoPayout ? 'bg-[#042BFD]' : 'bg-gray-200'}`}
+                            >
+                              <div className={`w-[18px] h-[18px] bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out ${autoPayout ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                            </div>
+                          ) : (
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded flex items-center shrink-0 ${
+                              autoPayout ? 'bg-[#ECFDF5] text-[#059669]' : 'bg-[#F1F5F9] text-[#64748B]'
+                            }`}>
+                              {autoPayout ? 'ON' : 'OFF'}
+                            </span>
+                          )}
                         </div>
 
                         <div className="flex items-center justify-between p-3">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 pr-4">
                             <div className="w-9 h-9 rounded-xl bg-[#F8F9FA] flex items-center justify-center shrink-0">
                               <Bell size={18} className="text-[#042BFD]" strokeWidth={1.5} />
                             </div>
@@ -279,12 +289,22 @@ export default function DashNavbar({
                               <p className="text-[11px] text-gray-500">You will be notified when a payment has been made.</p>
                             </div>
                           </div>
-                          <div 
-                            onClick={() => isEditing && setNotifyPayments(!notifyPayments)}
-                            className={`w-10 h-[22px] rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 ${isEditing ? 'cursor-pointer' : 'cursor-default opacity-80'} ${notifyPayments ? 'bg-[#042BFD]' : 'bg-gray-200'}`}
-                          >
-                            <div className={`w-[18px] h-[18px] bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out ${notifyPayments ? 'translate-x-[18px]' : 'translate-x-0'}`} />
-                          </div>
+                          
+                          {/* Toggle Logic: Show Switch if Editing, Badge if Not */}
+                          {isEditing ? (
+                            <div 
+                              onClick={() => setNotifyPayments(!notifyPayments)}
+                              className={`w-10 h-[22px] rounded-full p-0.5 transition-colors duration-200 ease-in-out shrink-0 cursor-pointer ${notifyPayments ? 'bg-[#042BFD]' : 'bg-gray-200'}`}
+                            >
+                              <div className={`w-[18px] h-[18px] bg-white rounded-full shadow-sm transform transition-transform duration-200 ease-in-out ${notifyPayments ? 'translate-x-[18px]' : 'translate-x-0'}`} />
+                            </div>
+                          ) : (
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded flex items-center shrink-0 ${
+                              notifyPayments ? 'bg-[#ECFDF5] text-[#059669]' : 'bg-[#F1F5F9] text-[#64748B]'
+                            }`}>
+                              {notifyPayments ? 'ON' : 'OFF'}
+                            </span>
+                          )}
                         </div>
 
                       </div>

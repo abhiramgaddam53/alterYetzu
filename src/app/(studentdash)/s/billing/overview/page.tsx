@@ -94,13 +94,13 @@ const INVOICES_DATA = [
 const getStatusStyles = (status: string) => {
   switch (status.toLowerCase()) {
     case "paid":
-      return "bg-[#ECFDF5] text-[#059669]";
+      return "bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]";
     case "pending":
-      return "bg-[#FFF7ED] text-[#EA580C]";
+      return "bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA]";
     case "failed":
-      return "bg-[#FEF2F2] text-[#E11D48]";
+      return "bg-[#FEF2F2] text-[#E11D48] border border-[#FECDD3]";
     case "cancelled":
-      return "bg-[#F1F5F9] text-[#64748B]";
+      return "bg-[#F8FAFC] text-[#64748B] border border-[#E2E8F0]";
     default:
       return "bg-gray-100 text-gray-600";
   }
@@ -124,13 +124,19 @@ const getMetricIconStyles = (colorScheme: string) => {
 
 export default function PaymentsOverviewPage() {
   return (
-    <div className="w-full min-h-screen bg-[#F8F9FA] p-6 md:p-10 font-sans">
-      <div className="max-w-[1600px] mx-auto">
-        
-        {/* Page Header */}
-        <h1 className="text-[22px] md:text-[24px] font-bold text-gray-900 mb-8">
-          Payments Overview
-        </h1>
+    <div className="w-full min-h-screen bg-[#F8F9FA] font-sans flex flex-col">
+      
+      {/* --- FULL WIDTH WHITE HEADER --- */}
+      <div className="bg-white px-6 md:px-10 py-6  border-b border-gray-200 shrink-0">
+        <div className="max-w-[1600px] mx-auto">
+          <h1 className="text-[24px] font-bold text-gray-900">
+            Payments Overview
+          </h1>
+        </div>
+      </div>
+
+      {/* --- MAIN GRAY CONTENT AREA --- */}
+      <div className="flex-1 p-6 md:p-10 max-w-[1600px] mx-auto w-full">
 
         {/* --- METRICS GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -143,7 +149,7 @@ export default function PaymentsOverviewPage() {
                 key={metric.id} 
                 className="bg-white rounded-[20px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 flex flex-col"
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-5 ${iconStyles}`}>
+                <div className={`w-10 h-10 rounded-[12px] flex items-center justify-center mb-5 ${iconStyles}`}>
                   <Icon size={20} strokeWidth={2} />
                 </div>
                 <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5">
@@ -161,7 +167,7 @@ export default function PaymentsOverviewPage() {
         </div>
 
         {/* --- PLAN BANNER --- */}
-        <div className="  bg-gradient-to-b from-[#030213] via-[#1A1A4E] to-[#2D2D7E] rounded-[24px] p-6 md:p-8 lg:px-10 flex flex-col lg:flex-row justify-between lg:items-center gap-8 mb-8 shadow-md">
+        <div className="bg-gradient-to-b from-[#030213] via-[#1A1A4E] to-[#2D2D7E] rounded-[24px] p-6 md:p-8 lg:px-10 flex flex-col lg:flex-row justify-between lg:items-center gap-8 mb-8 shadow-lg">
           
           {/* Left Side: Plan Info */}
           <div>
@@ -174,7 +180,7 @@ export default function PaymentsOverviewPage() {
               </span>
             </div>
             
-            <h2 className="text-[24px]  font-medium text-white mb-1.5 leading-snug">
+            <h2 className="text-[26px] font-medium text-white mb-1.5 leading-snug">
               Pro Mentorship Plan
             </h2>
             <p className="text-[13px] text-[#8A88A4] mb-6">
@@ -222,12 +228,12 @@ export default function PaymentsOverviewPage() {
         <div className="bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 md:p-8">
           
           {/* Section Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-[16px] font-bold text-gray-900">
+          <div className="flex justify-between items-center border-b border-gray-100 mb-4">
+            <h2 className="text-[18px] font-bold text-gray-900">
               Recent Invoices
             </h2>
             <button className="text-[13px] font-semibold text-[#042BFD] hover:text-blue-800 flex items-center gap-1 transition-colors">
-              View all <ArrowRight size={14} strokeWidth={2} />
+              View all <ArrowRight size={16} strokeWidth={2} />
             </button>
           </div>
 
@@ -236,22 +242,22 @@ export default function PaymentsOverviewPage() {
             {INVOICES_DATA.map((invoice, index) => (
               <div 
                 key={invoice.id} 
-                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 ${
+                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 ${
                   index !== INVOICES_DATA.length - 1 ? 'border-b border-gray-100' : ''
-                } hover:bg-gray-50/50 transition-colors rounded-xl px-2 -mx-2`}
+                } hover:bg-gray-50/50 transition-colors group`}
               >
                 
                 {/* Left Side: Icon & Details */}
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#F8FAFC] border border-gray-100 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-[10px] bg-[#F8FAFC] border border-gray-200 flex items-center justify-center shrink-0">
                     <FileText size={18} className="text-gray-400" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h4 className="text-[14px] font-bold text-gray-900 mb-1 line-clamp-1">
+                    <h4 className="text-[14px] font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-[#042BFD] transition-colors cursor-pointer">
                       {invoice.title}
                     </h4>
-                    <p className="text-[12px] font-medium text-gray-500">
-                      {invoice.id} • {invoice.type} • {invoice.date}
+                    <p className="text-[13px] font-medium text-gray-500">
+                      {invoice.id} <span className="mx-1">•</span> {invoice.type} <span className="mx-1">•</span> {invoice.date}
                     </p>
                   </div>
                 </div>
@@ -261,7 +267,7 @@ export default function PaymentsOverviewPage() {
                   <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getStatusStyles(invoice.status)}`}>
                     {invoice.status}
                   </span>
-                  <span className="text-[15px] font-bold text-gray-900 min-w-[60px] text-right">
+                  <span className="text-[15px] font-bold text-gray-900 min-w-[70px] text-right">
                     {invoice.amount}
                   </span>
                 </div>
