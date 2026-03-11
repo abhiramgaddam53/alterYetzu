@@ -75,7 +75,7 @@ const getColorStyles = (colorScheme: string) => {
         bgGradient: "from-[#FFF0F2] via-white via-40% to-white",
         badgeBg: "bg-[#FFF0F2]",
         badgeText: "text-[#E11D48]",
-        image: "/images/file-format-red.svg"
+        image: "/images/file-format-red1.svg"
       };
     case "orange":
       return {

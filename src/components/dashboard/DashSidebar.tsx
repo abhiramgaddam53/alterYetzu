@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -15,7 +16,9 @@ import {
     DollarSign,
     Send,
     ChevronDown,
-    Headphones
+    Headphones,
+    Menu,
+    RefreshCw
 } from "lucide-react";
 import Image from "next/image";
 import { useLogoutMutation } from "@/lib/queries/identityService/useIdentityService";
@@ -60,6 +63,9 @@ export default function DashSidebar({ role, isOpen, onClose }: DashSidebarProps)
     const { mutateAsync: logout } = useLogoutMutation();
     const { user } = useSession();
 
+    // State to handle the Billing Sub-menu toggle
+    const [isBillingOpen, setIsBillingOpen] = useState(false);
+
     const getNavItems = () => {
         switch (role) {
             case "admin":
@@ -74,6 +80,9 @@ export default function DashSidebar({ role, isOpen, onClose }: DashSidebarProps)
     };
 
     const navItems = getNavItems();
+    
+    // Determine base path for dynamic links in the footer
+    const basePath = role === "admin" ? "/a" : role === "educator" ? "/e" : "/s";
 
     return (
         <>
@@ -129,20 +138,60 @@ export default function DashSidebar({ role, isOpen, onClose }: DashSidebarProps)
                         })}
                     </div>
 
+                    {/* Bottom Actions Section */}
                     <div className="pt-6 mt-6 space-y-1.5 border-t border-transparent">
-                        <button className="flex whitespace-nowrap items-center justify-between px-4 py-3.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors w-full group">
-                            <div className="flex items-center gap-4">
-                                <DollarSign size={22} strokeWidth={1.5} />
-                                <span className="text-[14px]">Billing & Payments</span>
-                            </div>
-                            <ChevronDown size={18} strokeWidth={1.5} className="text-gray-400 group-hover:text-black" />
-                        </button>
+                        
+                        {/* Billing & Payments with Sub-menu */}
+                        <div>
+                            <button 
+                                onClick={() => setIsBillingOpen(!isBillingOpen)}
+                                className="flex whitespace-nowrap items-center justify-between px-4 py-3.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors w-full group"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <DollarSign size={22} strokeWidth={1.5} />
+                                    <span className="text-[14px]">Billing & Payments</span>
+                                </div>
+                                <ChevronDown 
+                                    size={18} 
+                                    strokeWidth={1.5} 
+                                    className={`text-gray-400 group-hover:text-black transition-transform duration-200 ${isBillingOpen ? "rotate-180" : ""}`} 
+                                />
+                            </button>
 
-                        <button className="flex whitespace-nowrap items-center gap-4 px-4 py-3.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors w-full">
+                            {/* Sub-menu items */}
+                            {isBillingOpen && (
+                                <div className="ml-[27px] pl-3 border-l border-gray-200 flex flex-col gap-1 mt-1 mb-2">
+                                    <Link 
+                                        href={`${basePath}/billing/overview`} 
+                                        className="flex items-center gap-3 px-3 py-2.5 bg-[#F3F4F6] text-black font-medium rounded-xl transition-colors"
+                                    >
+                                        <Menu size={18} strokeWidth={1.5} />
+                                        <span className="text-[14px]">Overview</span>
+                                    </Link>
+                                    
+                                    <Link 
+                                        href={`${basePath}/billing/invoices`} 
+                                        className="flex items-center gap-3 px-3 py-2.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors"
+                                    >
+                                        <FileText size={18} strokeWidth={1.5} />
+                                        <span className="text-[14px]">Invoices</span>
+                                    </Link>
+
+                                    <Link 
+                                        href={`${basePath}/billing/subscriptions`} 
+                                        className="flex items-center gap-3 px-3 py-2.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors"
+                                    >
+                                        <RefreshCw size={18} strokeWidth={1.5} />
+                                        <span className="text-[14px]">Subscriptions</span>
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+
+                        <Link  href={`${basePath}/help`}  className="flex whitespace-nowrap items-center gap-4 px-4 py-3.5 text-[#4B5563] hover:text-black hover:bg-gray-50 rounded-xl transition-colors w-full">
                             <Headphones size={22} strokeWidth={1.5} />
                             <span className="text-[15px]">Help & Support</span>
-                        </button>
- 
+                        </Link>
  
                     </div>
                 </div>

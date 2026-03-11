@@ -1,370 +1,408 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { 
-  Clock, 
-  ArrowRight, 
-  MoreVertical, 
-  Send 
-} from "lucide-react";
-import { ASSIGNMENTS_DATA } from "../../constants";
+import React, { useState, useRef, useEffect } from "react";
+import { Search, Calendar, Clock, MoreVertical, Link2 } from "lucide-react";
+import Link from "next/link"; 
 
-// --- MOCK DATA ---
-const MENTORSHIP_COURSE_DATA = {
-  id: "mentorship-1",
-  banner: {
-    title: "Welcome Alan!",
-    text: "Track your progress, connect with your mentor, and achieve your goals."
+// Mock Data
+const MOCK_SESSIONS = [
+  // --- FOCUS FOR TODAY ---
+  {
+    id: "1",
+    slug: "major-insights-human-nervous-system",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    badge: "STARTS IN 12 MINS",
+    badgeType: "purple",
+    tab: "upcoming",
+    isFocusToday: true,
   },
-  courseDetails: {
-    title: "Human Anatomy & Physiology",
-    description: [
-      "Human Anatomy & Physiology forms the foundation of medical science, focusing on the structure and function of the human body. This course provides a system-wise understanding of organs, tissues, and cells, helping students visualize how the human body is organized and how each component contributes to normal physiological function.",
-      "Through detailed explanations, diagrams, and clinically relevant examples, students will learn to correlate anatomical structures with physiological processes. Emphasis is placed on key systems including musculoskeletal, cardiovascular, respiratory, nervous, and endocrine systems.",
-      "Designed for medical students, this course integrates clinical correlations, case-based discussions, and exam-oriented content."
-    ]
+  {
+    id: "2",
+    slug: "1-1-mentorship-future-renewable-energy",
+    title: "1:1 Mentorship: The Future of Renewable Energy",
+    type: "mentorship",
+    mentor: {
+      name: "Dr. Mathew Thomas",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Mathew+Thomas&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "6:15 AM - 7:15 PM",
+    badge: "TODAY • 6:15 PM",
+    badgeType: "orange",
+    tab: "upcoming",
+    isFocusToday: true,
   },
-  modules: [
-    { id: 1, title: "Introduction to Anatomy & Physiology", desc: "Understand the basic concepts of human anatomy and physiology, including anatomical terminology, body planes, levels." },
-    { id: 2, title: "Musculoskeletal System", desc: "Study the structure and function of bones, joints, and muscles. Learn about movements, muscle contractions, and clinical correlations." },
-    { id: 3, title: "Cardiovascular System", desc: "Explore the anatomy of the heart and blood vessels along with the physiology of blood circulation. Emphasis is placed on cardiac cycle." },
-    { id: 4, title: "Respiratory System", desc: "Learn the structure of the respiratory tract and the physiology of breathing. This chapter covers gas exchange, regulation of respiration." },
-    { id: 5, title: "Nervous System", desc: "Understand the organization and function of the central and peripheral nervous systems. Topics include neurons, nerve impulses, brain." }
-  ],
-  assignments: [
-    { id: "123456", title: "Anatomy Basics Quiz", date: "14-01-2026" },
-    { id: "123457", title: "Bone Structure Diagram", date: "18-01-2026" },
-    { id: "123458", title: "Heart Dissection Report", date: "22-01-2026" },
-    { id: "123459", title: "Neuron Function Analysis", date: "25-01-2026" },
-    { id: "123460", title: "Respiratory Volume Chart", date: "28-01-2026" },
-  ],
-  mentor: {
-    name: "Dr. Amit Ahuja",
-    role: "Human Anatomy & Physiology Specialist",
-    image: "https://picsum.photos/60/60?random=100"
+  // --- UPCOMING SESSIONS ---
+  {
+    id: "3",
+    slug: "cohort-advanced-methods-data-viz",
+    title: "Cohort: Advanced Methods in Data Visualization",
+    type: "cohort",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "23 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
   },
-  sideCard: {
-    title: "The Trending AI Skills In The Medical Industry",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    date: "23-10-26",
-    time: "10:30AM - 11:30AM",
-    image: "/Images/embryology-hero.jpg",
-    participants: 4
+  {
+    id: "4",
+    slug: "webinar-breakthroughs-cognitive-neuroscience",
+    title: "Webinar: Breakthroughs in Cognitive Neuroscience",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "24 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
+  },
+  {
+    id: "5",
+    slug: "1-1-mentorship-future-renewable-energy-2",
+    title: "1:1 Mentorship: The Future of Renewable Energy",
+    type: "mentorship",
+    mentor: {
+      name: "Dr. Mathew Thomas",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Mathew+Thomas&background=random",
+    },
+    date: "26 Feb, 2026",
+    time: "11:15 AM - 1:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
+  },
+  // --- COMPLETED ---
+  {
+    id: "6",
+    slug: "webinar-completed-1",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    tab: "completed",
+    isFocusToday: false,
+  },
+  {
+    id: "7",
+    slug: "webinar-completed-2",
+    title: "Webinar: Breakthroughs in Cognitive Neuroscience",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "23 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "completed",
+    isFocusToday: false,
+  },
+  // --- MISSED ---
+  {
+    id: "8",
+    slug: "webinar-missed-1",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "missed", 
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    tab: "missed",
+    isFocusToday: false,
+  },
+];
+
+const getThemeStyles = (type: string, badgeType?: string) => {
+  let badgeClasses = "";
+  if (badgeType === "purple") badgeClasses = "bg-[#E0D4F5] text-[#7B42F6]";
+  else if (badgeType === "orange") badgeClasses = "bg-[#FFEDD5] text-[#EA580C]";
+  else badgeClasses = "bg-gray-100 text-gray-600"; 
+
+  switch (type) {
+    case "webinar":
+      return {
+        wrapperBorder: "from-[#C4A9FF] via-transparent to-[#C4A9FF]",
+        bgGradient: "from-[#F3EDFF] via-white via-40% to-white",
+        icon: "/images/video-chat.svg",
+        badgeClasses,
+      };
+    case "mentorship":
+      return {
+        wrapperBorder: "from-[#FAD0A5] via-transparent to-[#FAD0A5]",
+        bgGradient: "from-[#FFF3E3] via-white via-40% to-white",
+        icon: "/images/User2.svg",
+        badgeClasses,
+      };
+    case "cohort":
+      return {
+        wrapperBorder: "from-[#9FE4EE] via-transparent to-[#9FE4EE]",
+        bgGradient: "from-[#E6F8FA] via-white via-40% to-white",
+        icon: "/images/team.svg",
+        badgeClasses,
+      };
+    case "missed":
+      return {
+        wrapperBorder: "from-[#FECDD3] via-transparent to-[#FECDD3]",
+        bgGradient: "from-[#FFF0F2] via-white via-40% to-white",
+        icon: "/images/video-chat.svg", 
+        badgeClasses,
+      };
+    default:
+      return {
+        wrapperBorder: "from-gray-200 via-transparent to-gray-200",
+        bgGradient: "from-gray-50 via-white via-40% to-white",
+        icon: "/images/video-chat.svg",
+        badgeClasses,
+      };
   }
 };
 
-export default function MySessionsPage() {
-  const [activeTab, setActiveTab] = useState<"Webinar" | "Mentorship">("Webinar");
-  const router = useRouter();
+export default function SessionsPage() {
+  const [activeTab, setActiveTab] = useState<"upcoming" | "completed" | "missed">("upcoming");
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
-  // Logic for empty states
-  const hasWebinars = ASSIGNMENTS_DATA && ASSIGNMENTS_DATA.length > 0;
-  const hasMentorship = true; // Toggle to false to see Empty State
+  const filteredSessions = MOCK_SESSIONS.filter((s) => s.tab === activeTab);
+  const focusTodaySessions = filteredSessions.filter((s) => s.isFocusToday);
+  const otherSessions = filteredSessions.filter((s) => !s.isFocusToday);
 
-  return (
-    <div className="w-full min-h-screen bg-[#F9FAFB] p-2 md:p-4 font-['Inter']">
-      
-      {/* Tabs */}
-      <div className="flex gap-3 mb-8">
-        <button
-          onClick={() => setActiveTab("Webinar")}
-          className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-            activeTab === "Webinar"
-              ? "bg-[#042BFD] text-white shadow-md shadow-blue-200"
-              : "bg-white text-gray-500 hover:text-gray-900 border border-transparent hover:border-gray-200"
-          }`}
-        >
-          Webinar
-        </button>
-        <button
-          onClick={() => setActiveTab("Mentorship")}
-          className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-            activeTab === "Mentorship"
-              ? "bg-[#042BFD] text-white shadow-md shadow-blue-200"
-              : "bg-white text-gray-500 hover:text-gray-900 border border-transparent hover:border-gray-200"
-          }`}
-        >
-          Mentorship
-        </button>
-      </div>
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdownId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-      <div className="w-full">
-        
-        {/* ================= WEBINAR TAB ================= */}
-        {activeTab === "Webinar" && (
-  hasWebinars ? (
-    <div className="flex flex-col gap-6">
-      {ASSIGNMENTS_DATA.map((item) => (
-        <div 
-          key={item.id} 
-          /* CHANGED: flex-col on mobile, md:flex-row on desktop. 
-             Padded correctly for mobile.
-          */
-          className="bg-white border border-gray-200 rounded-[20px] p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 shadow-sm hover:shadow-md transition-shadow"
-        >
-          {/* Content Container */}
-          <div className="flex-1 flex flex-col justify-between order-2 md:order-1">
-            <div>
-              <div className="flex items-center -space-x-2 mb-4">
-                 {[1,2,3].map(i => (
-                   <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white"></div>
-                 ))}
-                 <div className="w-8 h-8 rounded-full bg-blue-50 border-2 border-white flex items-center justify-center text-xs font-bold text-[#042BFD]">
-                   +4
-                 </div>
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2 md:line-clamp-none">
-                {item.webinar.description}
-              </p>
-              <div className="flex flex-wrap items-center text-xs text-gray-500 font-medium mb-6 gap-y-2">
-                <div className="flex items-center">
-                  <Clock size={16} className="mr-2 text-gray-400" />
-                  <span>{item.webinar.date}</span>
-                </div>
-                <span className="mx-2 text-gray-300 hidden sm:inline">|</span>
-                <span className="w-full sm:w-auto mt-1 sm:mt-0">{item.webinar.time}</span>
+  const renderCard = (session: any, isFocus: boolean) => {
+    const theme = getThemeStyles(session.type, session.badgeType);
+    const isDropdownOpen = openDropdownId === session.id;
+
+    return (
+      <div
+        key={session.id}
+        className={`relative rounded-[18px] p-[1.5px] bg-gradient-to-br ${theme.wrapperBorder} flex flex-col min-h-[300px]`}
+      >
+        <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-6 h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50">
+          
+          <div className={`absolute inset-0 rounded-[16px] bg-gradient-to-b ${theme.bgGradient} pointer-events-none z-0`}></div>
+
+          <div className="flex justify-between items-start mb-6 relative z-10">
+            <img src={theme.icon} alt="Icon" className="w-[64px] h-[64px] object-contain opacity-90" />
+            {session.badge && (
+              <span className={`${theme.badgeClasses} text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wide flex items-center gap-1.5 shadow-sm`}>
+                {session.badge === "STARTS IN 12 MINS" && <Clock size={14} />}
+                {session.badge}
+              </span>
+            )}
+          </div>
+
+          <div className="relative z-10 flex-1 flex flex-col">
+            <Link href={`sessions/${session.slug}`} className="hover:underline">
+              <h3 className="text-[18px] font-bold text-gray-900 mb-5 leading-snug pr-2 line-clamp-2">
+                {session.title}
+              </h3>
+            </Link>
+
+            <div className="flex items-center gap-3 mb-6 mt-auto">
+              <img src={session.mentor.avatar} alt="Mentor" className="w-11 h-11 rounded-full object-cover shrink-0" />
+              <div>
+                <p className="text-[14px] font-semibold text-gray-900 leading-none mb-1">{session.mentor.name}</p>
+                <p className="text-[12px] text-gray-500">{session.mentor.role}</p>
               </div>
             </div>
 
-            {/* Buttons: Stacked on mobile, side-by-side on desktop */}
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-auto">
-              <button className="w-full sm:w-auto bg-[#042BFD] text-white text-sm font-medium px-8 py-2.5 rounded-lg shadow-md shadow-blue-500/20 hover:bg-[#0325D7] transition-colors">
-                Join
-              </button>
+            <div className="flex items-center gap-4 bg-[#F8FAFC] rounded-[10px] px-4 py-3 mb-6 w-full border border-gray-50">
+              <div className="flex items-center gap-2 text-[13px] font-medium text-gray-600">
+                <Calendar size={16} className="text-gray-400" /> {session.date}
+              </div>
+              <div className="flex items-center gap-2 text-[13px] font-medium text-gray-600">
+                <Clock size={16} className="text-gray-400" /> {session.time}
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 relative">
+              {isFocus && activeTab === "upcoming" ? (
+                <Link href={`sessions/${session.slug}`}>
+                  <button className="px-6 bg-[#111111] hover:bg-black text-white rounded-[10px] py-2.5 text-[14px] font-medium transition-colors h-11">
+                    Join Session
+                  </button>
+                </Link>
+              ) : (
+                <Link href={`sessions/${session.slug}`}>
+                  <button className="px-6 border border-[#042BFD] text-[#042BFD] bg-white rounded-[10px] py-2.5 text-[14px] font-medium hover:bg-blue-50 transition-colors h-11">
+                    View Details
+                  </button>
+                </Link>
+              )}
+              
               <button 
-                onClick={() => router.push(`/s/assignments/${item.slug}`)}
-                className="w-full sm:w-auto justify-center bg-white border border-gray-300 text-gray-600 text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-gray-50 hover:text-[#021165] hover:border-[#021165] transition-all flex items-center gap-2"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenDropdownId(isDropdownOpen ? null : session.id);
+                }}
+                className="w-11 h-11 border border-gray-200 rounded-[10px] text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors flex items-center justify-center shrink-0"
               >
-                View More <ArrowRight size={16} />
+                <MoreVertical size={20} />
               </button>
+
+              {isDropdownOpen && (
+                <div 
+                  ref={dropdownRef}
+                  className="absolute right-0 bottom-[110%] mb-2 w-48 bg-white border border-gray-100 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.1)] py-2 z-50 animate-in fade-in zoom-in-95 duration-200"
+                >
+                  <button 
+                    className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setOpenDropdownId(null)}
+                  >
+                    Reschedule
+                  </button>
+                  <button 
+                    className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setOpenDropdownId(null)}
+                  >
+                    Copy Link to Interview
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Image Container */}
-          {/* CHANGED: Fixed aspect ratio on mobile (h-48), specific sizing on desktop */}
-          <div className="w-full md:w-[350px] h-48 md:h-[220px] shrink-0 order-1 md:order-2 relative rounded-xl overflow-hidden bg-gray-100">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={item.webinar.heroImage} 
-              alt={item.title}
-              className="w-full h-full object-cover"
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-[#F8F9FA] font-sans">
+      
+      {/* --- HEADER --- */}
+      <div className="bg-white px-6 md:px-10 pt-4 border-b border-gray-200">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <h1 className="text-[22px] font-bold text-gray-900">Sessions</h1>
+          
+          <div className="relative w-full md:w-[320px]">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
+            </div>
+            <input
+              type="text"
+              placeholder="Search by session, mentor or topic"
+              className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[13px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
             />
           </div>
         </div>
-      ))}
-    </div>
-  ) : (
-    <EmptyState type="Webinar" />
-  )
-)}
-
-        {/* ================= MENTORSHIP TAB ================= */}
-        {activeTab === "Mentorship" && (
-          hasMentorship ? (
-            // FIX: added 'items-start' to make sticky work
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-              
-              {/* Left Main Content (Scrolls naturally with the page) */}
-              <div className="flex-1 flex flex-col gap-8 w-full min-w-0">
-                
-                {/* 1. SEPARATE BLUE BANNER */}
-                <div className="relative w-full h-[181px] bg-[#042BFD] rounded-[20px] overflow-hidden flex items-center shadow-lg shadow-blue-100/50">
-      <div className="flex items-center w-full px-6 gap-8">
         
-        {/* SVG Icon Section */}
-        <div className="relative flex-shrink-0 w-[112px] h-[112px] flex items-center justify-center">
-          
-          <img
-            src="/Images/Reading.svg"
-            alt="Reading Illustration"
-            className="w-full h-full object-contain"
-          />
+        {/* Tabs */}
+        <div className="flex items-center gap-8">
+          {(["upcoming", "completed", "missed"] as const).map((tab) => {
+            const isActive = activeTab === tab;
+            let count = MOCK_SESSIONS.filter((s) => s.tab === tab).length;
 
- 
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`pb-3.5 flex items-center gap-2 border-b-2 transition-all -mb-[2px] capitalize ${
+                  isActive
+                    ? "border-[#042BFD] text-gray-900 font-semibold"
+                    : "border-transparent text-gray-500 hover:text-gray-700 font-medium"
+                }`}
+              >
+                {tab}
+                <span 
+                  className={`flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-medium ${
+                    isActive 
+                      ? tab === "missed" ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600" 
+                      : "bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
-
-        {/* Text Content Area */}
-        <div className="flex flex-col">
-          <h1 className="text-[24px] font-medium  text-white mb-2 font-inter">
-            Welcome Alan!
-          </h1>
-          <p className="text-blue-100 text-xs md:text-[16px]  max-w-lg leading-snug font-inter">
-            Track your progress, connect with your mentor, and achieve your goals.
-          </p>
-        </div>
-
       </div>
 
-      {/* Background glow effect */}
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-[80px] pointer-events-none"></div>
-    </div>
-
-                {/* 2. MAIN CONTENT CARD (Description + Modules + Assignments) */}
-                <div className="bg-white rounded-[20px] p-8 border border-gray-200 shadow-sm w-full">
-                  
-                  {/* --- Section A: Description --- */}
-                  <div className="mb-5">
-                    <h3 className="text-xl font-bold text-[#021165] mb-4">{MENTORSHIP_COURSE_DATA.courseDetails.title}</h3>
-                    <div className="space-y-4 text-sm text-gray-600 leading-relaxed text-justify">
-                      {MENTORSHIP_COURSE_DATA.courseDetails.description.map((para, i) => (
-                        <p key={i}>{para}</p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Divider */}
-                  <hr className="border-gray-100 mb-5" />
-
-                  {/* --- Section B: Modules (Standalone Points, No Lines) --- */}
-                  <div className="mb-5">
-                     <div className="flex flex-col gap-4">
-                        {MENTORSHIP_COURSE_DATA.modules?.map((mod) => (
-                          <div key={mod.id} className="bg-[#F9FAFB] rounded-xl p-5 border border-gray-100 flex gap-5 items-start">
-                            {/* Number Badge - Standalone */}
-                            <div className="shrink-0">
-                              <div className="w-10 h-10 rounded-full bg-[#042BFD] text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                                {String(mod.id).padStart(2, '0')}
-                              </div>
-                            </div>
-                            {/* Text */}
-                            <div>
-                              <h4 className="text-base font-bold text-[#021165] mb-1">{mod.title}</h4>
-                              <p className="text-sm text-gray-500 leading-relaxed">
-                                {mod.desc}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                     </div>
-                  </div>
-
-                  {/* Divider */}
-                  <hr className="border-gray-100 mb-5" />
-
-                  {/* --- Section C: Assignments Table --- */}
-                  <div>
-                    <h3 className="text-lg font-bold text-[#021165] mb-6">Assignments</h3>
-                    <div className="border border-gray-200 rounded-xl overflow-hidden">
-                      {MENTORSHIP_COURSE_DATA.assignments?.map((assign, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors group cursor-pointer">
-                           <div className="flex items-center gap-4 md:gap-8">
-                             <span className="text-sm text-gray-400 font-medium w-20">{assign.id}</span>
-                             <span className="text-sm text-gray-800 font-semibold group-hover:text-[#042BFD] transition-colors">{assign.title}</span>
-                           </div>
-                           <div className="flex items-center gap-6">
-                             <span className="text-sm text-gray-500 hidden sm:block">{assign.date}</span>
-                             <button className="p-2 hover:bg-gray-100 rounded-full">
-                               <MoreVertical size={16} className="text-gray-400" />
-                             </button>
-                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
+      {/* --- MAIN CONTENT AREA --- */}
+      <div className="p-6 md:px-10 max-w-[1600px] mx-auto mt-2">
+        
+        {activeTab === "upcoming" ? (
+          <>
+            {/* Focus For Today */}
+            {focusTodaySessions.length > 0 && (
+              <div className="mb-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                    FOCUS FOR TODAY
+                  </span>
+                  <div className="flex-1 h-px bg-gray-200"></div>
+                </div>
+                {/* Fixed to max 3 columns */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {focusTodaySessions.map((session) => renderCard(session, true))}
                 </div>
               </div>
+            )}
 
-              {/* Right Sidebar (STICKY Behavior) */}
-              {/* FIX: added 'sticky top-8' to prevent scrolling with main content */}
-              <div className="w-full lg:w-[340px] shrink-0 flex flex-col gap-6 sticky top-8 h-fit">
-                
-                {/* Mentor Card */}
-                <div className="bg-white border border-gray-200 rounded-[20px] p-6 shadow-sm">
-                   <div className="flex items-center gap-4 mb-5">
-                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                     <img 
-                       src={MENTORSHIP_COURSE_DATA.mentor.image} 
-                       alt="Mentor" 
-                       className="w-14 h-14 rounded-full object-cover border border-gray-200"
-                     />
-                     <div>
-                       <h4 className="font-bold text-[#021165] text-base">{MENTORSHIP_COURSE_DATA.mentor.name}</h4>
-                       <p className="text-xs text-gray-500 leading-tight mt-1">
-                         {MENTORSHIP_COURSE_DATA.mentor.role}
-                       </p>
-                     </div>
-                   </div>
-                   
-                   <div className="relative">
-                     <input 
-                       type="text" 
-                       placeholder="Chat with your Mentor" 
-                       className="w-full pl-4 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#042BFD] focus:ring-1 focus:ring-[#042BFD] transition-all"
-                     />
-                     <Send size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#042BFD] cursor-pointer" />
-                   </div>
+            {/* Upcoming Sessions */}
+            {otherSessions.length > 0 && (
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                    UPCOMING SESSIONS
+                  </span>
+                  <div className="flex-1 h-px bg-gray-200"></div>
                 </div>
-
-                {/* Side Promo Card */}
-                <div className="bg-white border border-gray-200 rounded-[20px] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                   <div className="h-40 bg-gray-200 relative">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img 
-                        src={MENTORSHIP_COURSE_DATA.sideCard.image} 
-                        alt="Course"
-                        className="w-full h-full object-cover" 
-                      />
-                      <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-bold text-[#042BFD]">
-                        +{MENTORSHIP_COURSE_DATA.sideCard.participants}
-                      </div>
-                   </div>
-                   <div className="p-5">
-                     <h4 className="font-bold text-[#021165] mb-2 text-base leading-tight">
-                        {MENTORSHIP_COURSE_DATA.sideCard.title}
-                     </h4>
-                     <p className="text-xs text-gray-500 mb-4 line-clamp-2 leading-relaxed">
-                       {MENTORSHIP_COURSE_DATA.sideCard.description}
-                     </p>
-                     <div className="flex items-center text-[10px] text-gray-400 mb-5 font-medium">
-                       <Clock size={12} className="mr-1.5" />
-                       <span>{MENTORSHIP_COURSE_DATA.sideCard.date}</span>
-                       <span className="mx-2">|</span>
-                       <span>{MENTORSHIP_COURSE_DATA.sideCard.time}</span>
-                     </div>
-                     <button className="w-full bg-[#042BFD] text-white py-2.5 rounded-lg text-xs font-bold hover:bg-[#0325D7] transition-colors shadow-md shadow-blue-100">
-                       Join
-                     </button>
-                   </div>
+                {/* Fixed to max 3 columns */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {otherSessions.map((session) => renderCard(session, false))}
                 </div>
-
               </div>
-            </div>
-          ) : (
-            <EmptyState type="Mentorship" />
-          )
+            )}
+          </>
+        ) : (
+          /* Completed / Missed Tab View */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+            {filteredSessions.map((session) => renderCard(session, false))}
+            
+            {filteredSessions.length === 0 && (
+              <div className="col-span-full py-20 text-center text-gray-500">
+                No sessions found in this category.
+              </div>
+            )}
+          </div>
         )}
+
       </div>
-    </div>
-  );
-}
-
-// --- EMPTY STATE COMPONENT ---
-function EmptyState({ type }: { type: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-20 min-h-[60vh]">
-      
-      {/* Watermark Image Container */}
-      <div className="mb-6 relative w-64 h-64 flex items-center justify-center">
-         {/* Using the specific image requested */}
-         {/* eslint-disable-next-line @next/next/no-img-element */}
-         <img 
-            src="/Images/no_webinars_watermark.png" 
-            alt="No Sessions" 
-            className="w-full h-full object-contain opacity-90"
-         />
-      </div>
-
-      <h2 className="text-xl font-bold text-gray-900 mb-2">No {type}</h2>
-      <p className="text-sm text-gray-500 mb-8 font-medium">
-        You have not purchased any {type.toLowerCase()}
-      </p>
-
-      <button className="flex items-center gap-2 bg-[#042BFD] text-white text-sm font-medium px-10 py-3 rounded-lg shadow-md shadow-blue-500/20 hover:bg-[#0325D7] transition-colors">
-        Explore <ArrowRight size={16} />
-      </button>
     </div>
   );
 }
