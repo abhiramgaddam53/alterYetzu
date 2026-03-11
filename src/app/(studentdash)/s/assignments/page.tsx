@@ -31,7 +31,7 @@ const MOCK_ASSIGNMENTS = [
     sessionName: "1:1 Mentorship: The Rise of Edge Computing",
     mentorImage: "https://ui-avatars.com/api/?name=Jane+Smith&background=random",
     status: "DUE",
-    date: "12 APR, 2026",
+    date: "13 APR, 2026",
     type: "pending",
     colorScheme: "gray",
   },
@@ -71,36 +71,36 @@ const getColorStyles = (colorScheme: string) => {
   switch (colorScheme) {
     case "red":
       return {
-        wrapperBorder: "from-[#FBCFE8] via-transparent to-transparent",
-        bgGradient: "from-[#FDF2F8] to-transparent",
-        badgeBg: "bg-[#FCE7F3]",
-        badgeText: "text-[#9D174D]",
-        image:"/images/file-format-red.svg"
+        wrapperBorder: "from-[#FECDD3] via-transparent to-[#FECDD3]",
+        bgGradient: "from-[#FFF0F2] via-white via-40% to-white",
+        badgeBg: "bg-[#FFF0F2]",
+        badgeText: "text-[#E11D48]",
+        image: "/images/file-format-red.svg"
       };
     case "orange":
       return {
-        wrapperBorder: "from-[#FED7AA] via-transparent to-transparent",
-        bgGradient: "from-[#FFF7ED] to-transparent",
-        badgeBg: "bg-[#FFEDD5]",
-        badgeText: "text-[#C2410C]",
-        image:"/images/file-format-orange.svg"
+        wrapperBorder: "from-[#FED7AA] via-transparent to-[#FED7AA]",
+        bgGradient: "from-[#FFF7ED] via-white via-40% to-white",
+        badgeBg: "bg-[#FFF7ED]",
+        badgeText: "text-[#EA580C]",
+        image: "/images/file-format-orange.svg"
       };
     case "green":
       return {
-        wrapperBorder: "from-[#A7F3D0] via-transparent to-transparent",
-        bgGradient: "from-[#ECFDF5] to-transparent",
+        wrapperBorder: "from-[#A7F3D0] via-transparent to-[#A7F3D0]",
+        bgGradient: "from-[#ECFDF5] via-white via-40% to-white",
         badgeBg: "bg-[#D1FAE5]",
         badgeText: "text-[#065F46]",
-        image:"/images/file-format-green.svg"
+        image: "/images/file-format-green.svg"
       };
     case "gray":
     default:
       return {
-        wrapperBorder: "from-[#E2E8F0] via-transparent to-transparent",
-        bgGradient: "from-[#F8FAFC] to-transparent",
-        badgeBg: "bg-[#F1F5F9]",
-        badgeText: "text-[#475569]",
-        image:"/images/file-format-gray.svg"
+        wrapperBorder: "from-[#E2E8F0] via-transparent to-[#E2E8F0]",
+        bgGradient: "from-[#F8FAFC] via-white via-40% to-white",
+        badgeBg: "bg-transparent",
+        badgeText: "text-[#64748B]",
+        image: "/images/file-format-gray.svg"
       };
   }
 };
@@ -114,129 +114,134 @@ export default function AssignmentPage() {
   );
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
+    <div className="w-full min-h-screen bg-[#F8F9FA] font-sans">
       
-      {/* --- HEADER --- */}
-      <div className="mb-6 bg-white px-3 pt-3 rounded-2xl">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Assignments</h1>
+      {/* --- FULL WIDTH HEADER --- */}
+      <div className="bg-white px-6 md:px-10 pt-8 border-b border-gray-200">
+        <h1 className="text-[22px] font-bold text-gray-900 mb-6">Assignments</h1>
         
         {/* Tabs */}
-        <div className="flex items-center gap-6 border-b border-gray-200">
+        <div className="flex items-center gap-8">
           <button
             onClick={() => setActiveTab("pending")}
-            className={`pb-3 flex items-center gap-2 border-b-2 transition-all ${
+            className={`pb-3.5 flex items-center gap-2 border-b-2 transition-all -mb-[2px] ${
               activeTab === "pending"
-                ? "border-blue-600 text-gray-900 font-semibold"
+                ? "border-[#042BFD] text-gray-900 font-semibold"
                 : "border-transparent text-gray-500 hover:text-gray-700 font-medium"
             }`}
           >
             Pending
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-              activeTab === "pending" ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-500"
-            }`}>
-              6
-            </span>
+            {activeTab === "pending" ? (
+              <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-[#042BFD] text-white text-[10px] font-medium">
+                6
+              </span>
+            ) : (
+              <span className="text-gray-400 text-xs font-medium">6</span>
+            )}
           </button>
           
           <button
             onClick={() => setActiveTab("completed")}
-            className={`pb-3 flex items-center gap-2 border-b-2 transition-all ${
+            className={`pb-3.5 flex items-center gap-2 border-b-2 transition-all -mb-[2px] ${
               activeTab === "completed"
-                ? "border-blue-600 text-gray-900 font-semibold"
+                ? "border-[#042BFD] text-gray-900 font-semibold"
                 : "border-transparent text-gray-500 hover:text-gray-700 font-medium"
             }`}
           >
             Completed
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-              activeTab === "completed" ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-500"
-            }`}>
-              2
-            </span>
+            {activeTab === "completed" ? (
+              <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-[#042BFD] text-white text-[10px] font-medium">
+                2
+              </span>
+            ) : (
+              <span className="text-gray-400 text-xs font-medium">2</span>
+            )}
           </button>
         </div>
       </div>
 
-      {/* --- SEARCH BAR --- */}
-      <div className="mb-8 max-w-md">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <Search className="h-[18px] w-[18px] text-gray-400" strokeWidth={2} />
-          </div>
-          <input
-            type="text"
-            placeholder="Search by assignment, session or mentor"
-            className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all"
-          />
-        </div>
-      </div>
-
-      {/* --- GRID OF CARDS --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredAssignments.map((item) => {
-          const styles = getColorStyles(item.colorScheme);
-
-          return (
-            <div
-              key={item.id}
-              className={`relative rounded-[20px] p-[1.5px] bg-gradient-to-br ${styles.wrapperBorder} flex flex-col min-h-[280px]`}
-            >
-              <div className="relative flex-1 flex flex-col bg-white rounded-[18.5px] p-5 overflow-hidden h-full shadow-[0_2px_15px_rgba(0,0,0,0.03)] border border-gray-100/50">
-                
-                {/* Background Gradient inside white card */}
-                <div className={`absolute top-0 left-0 w-full h-[140px] bg-gradient-to-b ${styles.bgGradient} pointer-events-none z-0`}></div>
-                
-                {/* Icon Element (Ensuring High Visibility) */}
-                <div className="absolute top-5 left-5 z-10">
-                  <img 
-                    src={`${styles.image}` }
-                    alt="Assignment Icon" 
-                    className="w-14 h-14 opacity-80 mix-blend-multiply" 
-                  />
-                </div>
-
-                {/* Status Badge */}
-                <div className="flex justify-end mb-12 relative z-20">
-                  <span className={`${styles.badgeBg} ${styles.badgeText} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide`}>
-                    {item.status}: {item.date}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="relative z-20 flex-1 flex flex-col">
-                  <h3 className="text-[16px] font-bold text-gray-900 mb-4 leading-snug">
-                    {item.title}
-                  </h3>
-
-                  {/* Gray Info Box */}
-                  <div className="flex items-center justify-between bg-[#F8FAFC] rounded-xl p-3 mb-6 border border-gray-50">
-                    <div className="flex items-start gap-2.5 pr-2">
-                      <LinkIcon size={14} className="text-gray-400 mt-0.5 shrink-0" />
-                      <span className="text-[12px] text-gray-600 line-clamp-2 leading-relaxed">
-                        {item.sessionName}
-                      </span>
-                    </div>
-                    <img 
-                      src={item.mentorImage} 
-                      alt="Mentor" 
-                      className="w-8 h-8 rounded-full border-2 border-white shrink-0 object-cover" 
-                    />
-                  </div>
-
-                  {/* Footer Actions */}
-                  <div className="mt-auto flex gap-3">
-                    <button className="flex-1 border border-[#2563EB] text-[#2563EB] bg-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-50 transition-colors">
-                      {item.type === "pending" ? "Submit Assignment" : "Download Answer"}
-                    </button>
-                    <button className="p-2.5 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors flex items-center justify-center shrink-0">
-                      <Download size={18} />
-                    </button>
-                  </div>
-                </div>
-
-              </div>
+      {/* --- MAIN CONTENT AREA --- */}
+      <div className="p-6 md:px-10 max-w-[1600px] mx-auto mt-2">
+        
+        {/* Search Bar */}
+        <div className="mb-6 max-w-[360px]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
             </div>
-          );
-        })}
+            <input
+              type="text"
+              placeholder="Search by assignment, session or mentor"
+              className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-[10px] text-[13px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
+            />
+          </div>
+        </div>
+
+        {/* Grid of Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {filteredAssignments.map((item) => {
+            const styles = getColorStyles(item.colorScheme);
+
+            return (
+              <div
+                key={item.id}
+                className={`relative rounded-[18px] p-[1.5px] bg-gradient-to-br ${styles.wrapperBorder} flex flex-col min-h-[260px]`}
+              >
+                <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50">
+                  
+                  {/* Smooth Background Gradient inside card */}
+                  <div className={`absolute inset-0 bg-gradient-to-b ${styles.bgGradient} pointer-events-none z-0`}></div>
+                  
+                  {/* Top Row: Icon & Badge */}
+                  <div className="flex justify-between items-start mb-6 relative z-10">
+                    <img 
+                      src={styles.image}
+                      alt="Icon" 
+                      className="w-[52px] h-[52px] object-contain" 
+                    />
+                    <span className={`${styles.badgeBg} ${styles.badgeText} text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide`}>
+                      {item.status}: {item.date}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <div className="relative z-10 flex-1 flex flex-col">
+                    <h3 className="text-[15px] font-bold text-gray-900 mb-5 leading-snug pr-2">
+                      {item.title}
+                    </h3>
+
+                    {/* Gray Session Box */}
+                    <div className="flex items-center justify-between bg-[#F8FAFC] rounded-[10px] p-3 mb-5 mt-auto border border-gray-100">
+                      <div className="flex items-start gap-2.5 pr-2">
+                        <LinkIcon size={14} className="text-gray-400 mt-0.5 shrink-0" />
+                        <span className="text-[12px] text-gray-600 line-clamp-2 leading-relaxed">
+                          {item.sessionName}
+                        </span>
+                      </div>
+                      <img 
+                        src={item.mentorImage} 
+                        alt="Mentor" 
+                        className="w-7 h-7 rounded-full shrink-0 object-cover" 
+                      />
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex gap-2.5">
+                      <button className="flex-1 border border-[#042BFD] text-[#042BFD] bg-white rounded-lg py-2.5 text-[13px] font-medium hover:bg-blue-50 transition-colors">
+                        {item.type === "pending" ? "Submit Assignment" : "Download Answer"}
+                      </button>
+                      <button className="p-2.5 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors flex items-center justify-center shrink-0">
+                        <Download size={18} strokeWidth={1.5} />
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
       </div>
     </div>
   );

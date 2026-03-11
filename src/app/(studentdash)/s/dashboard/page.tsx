@@ -35,6 +35,12 @@ export default function OverviewPage() {
       <div className="flex flex-col xl:flex-row items-center justify-between bg-white border border-gray-100 shadow-sm rounded-2xl p-6 gap-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-purple-50 via-transparent to-transparent pointer-events-none"></div>
 
+        <img 
+          src="/images/clip-path.svg" 
+          alt="Background pattern" 
+          className="absolute left-[15%] top-1/2 -translate-y-1/2 h-[150%] min-w-[300px] object-cover pointer-events-none z-0 opacity-70" 
+        />
+
         <div className="flex flex-col sm:flex-row items-center sm:items-start xl:items-center gap-5 z-10 w-full xl:w-auto text-center sm:text-left">
           <div 
             className="relative w-[76px] h-[76px] rounded-full flex items-center justify-center shrink-0"
@@ -52,7 +58,7 @@ export default function OverviewPage() {
             <h1 className="text-xl md:text-xl font-bold text-gray-900 leading-tight">
               Welcome Natalia. You're on track...
             </h1>
-            <p className="text-xs text-gray-500 mt-1.5 max-w-lg">
+            <p className="text-sm text-gray-500 mt-1.5 max-w-lg">
               You're making great progress in your <span className="font-semibold text-gray-700">Data Science</span> journey. Keep the momentum going!
             </p>
           </div>
@@ -60,37 +66,37 @@ export default function OverviewPage() {
 
         <div className="flex items-center justify-start xl:justify-end overflow-x-auto w-full xl:w-auto pb-2 xl:pb-0 z-10 no-scrollbar">
 
-<div className="flex flex-col items-center gap-1 shrink-0">
-  <CheckCircle2 className="w-6 h-6 text-green-500 fill-green-100" />
-  <span className="text-xs font-medium text-gray-900">Signed up!</span>
-</div>
+          <div className="flex flex-col items-center gap-1 shrink-0">
+            <CheckCircle2 className="w-6 h-6 text-green-500 fill-green-100" />
+            <span className="text-xs font-medium text-gray-900">Signed up!</span>
+          </div>
 
-{/* progress bar */}
-<div className="w-16 h-[4px] bg-gray-300 rounded-full mb-6 mx-2">
-  <div className="w-3/4 h-full rounded-full bg-green-500"></div>
-</div>
+          {/* progress bar */}
+          <div className="w-16 h-[4px] bg-gray-300 rounded-full mb-6 mx-2">
+            <div className="w-3/4 h-full rounded-full bg-green-500"></div>
+          </div>
 
-<div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
-  <Calendar className="w-6 h-6 text-gray-400" />
-  <span className="text-xs font-medium text-gray-500">Sessions</span>
-</div>
+          <div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
+            <Calendar className="w-6 h-6 text-gray-400" />
+            <span className="text-xs font-medium text-gray-500">Sessions</span>
+          </div>
 
-{/* dashed connector */}
-<div className="w-8 h-[2px] border-t-2 border-dashed border-gray-300 mb-6 mx-2 shrink-0"></div>
+          {/* dashed connector */}
+          <div className="w-8 h-[2px] border-t-2 border-dashed border-gray-300 mb-6 mx-2 shrink-0"></div>
 
-<div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
-  <FileText className="w-6 h-6 text-gray-400" />
-  <span className="text-xs font-medium text-gray-500">Assignments</span>
-</div>
+          <div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
+            <FileText className="w-6 h-6 text-gray-400" />
+            <span className="text-xs font-medium text-gray-500">Assignments</span>
+          </div>
 
-<div className="w-8 h-[2px] border-t-2 border-dashed border-gray-300 mb-6 mx-2 shrink-0"></div>
+          <div className="w-8 h-[2px] border-t-2 border-dashed border-gray-300 mb-6 mx-2 shrink-0"></div>
 
-<div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
-  <Award className="w-6 h-6 text-gray-400" />
-  <span className="text-xs font-medium text-gray-500">Certifications</span>
-</div>
+          <div className="flex flex-col items-center gap-1 shrink-0 opacity-50">
+            <Award className="w-6 h-6 text-gray-400" />
+            <span className="text-xs font-medium text-gray-500">Certifications</span>
+          </div>
 
-</div>
+        </div>
       </div>
 
       <div className="border border-gray-100 shadow-sm rounded-2xl p-6 bg-white w-full overflow-hidden">
@@ -109,43 +115,63 @@ export default function OverviewPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-        <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#C4A9FF] via-[#F3EDFF] to-transparent flex flex-col min-h-[260px]">
-            <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <div className="absolute top-0 left-0 w-full h-[120px] bg-gradient-to-b from-[#F3EDFF] to-transparent pointer-events-none"></div>
-              {/* Card-1 */}
-              <div className="absolute top-5 left-5 z-0">
-                <img src="/images/video-chat.svg" alt="Video" className="w-16 h-16 opacity-70" />
-              </div>
-              <div className="flex justify-end mb-8 relative z-10">
-                <span className="bg-[#7B42F6] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase shrink-0">
-                  Today
-                </span>
-              </div>
-              <div className="relative z-10 flex-1 flex flex-col h-full justify-end">
-                <h3 className="text-[15px] font-bold text-gray-900 leading-snug mb-3">
-                  Webinar: Major Insights on Human Nervous System with Dr. Rao
-                </h3>
-                <div className="flex flex-wrap items-center gap-4 text-[13px] font-medium text-gray-500 mb-6">
-                  <span className="flex items-center gap-1.5 whitespace-nowrap"><Calendar size={14} /> 22 Feb, 2026</span>
-                  <span className="flex items-center gap-1.5 whitespace-nowrap"><Clock size={14} /> 3:00 PM</span>
-                </div>
-                <ViewDetailsButton variant="solid" />
-              </div>
-            </div>
-          </div>
           {/* Card-1 */}
-          <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#A3DFB3] via-[#E6F5EE] to-transparent flex flex-col min-h-[260px]">
+          <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#C4A9FF] via-transparent to-[#C4A9FF] flex flex-col min-h-[260px]">
+  <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+    
+    {/* Smooth Background Gradient (Full height fade to white) */}
+    <div className="absolute inset-0 bg-gradient-to-b from-[#F3EDFF] via-white to-white pointer-events-none z-0"></div>
+    
+    {/* Card Icon */}
+    <div className="absolute top-5 left-5 z-10">
+      <img src="/images/video-chat.svg" alt="Video" className="w-[68px] h-[68px]" />
+    </div>
+
+    {/* Badge */}
+    <div className="flex justify-end mb-8 relative z-20">
+      <span className="bg-[#7B42F6] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase shrink-0">
+        Today
+      </span>
+    </div>
+
+    {/* Content */}
+    <div className="relative z-20 flex-1 flex flex-col h-full justify-end mt-3">
+      <h3 className="text-[15px] font-bold text-gray-900 leading-snug mb-3">
+        Webinar: Major Insights on Human Nervous System with Dr. Rao
+      </h3>
+      <div className="flex flex-wrap items-center gap-4 text-[13px] font-medium text-gray-500 mb-6">
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          <Calendar size={14} /> 22 Feb, 2026
+        </span>
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          <Clock size={14} /> 3:00 PM
+        </span>
+      </div>
+      <ViewDetailsButton variant="solid" />
+    </div>
+    
+  </div>
+</div>
+          {/* Card-2 */}
+             <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#A3DFB3] via-transparent to-[#A3DFB3] flex flex-col min-h-[260px]">
             <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <div className="absolute top-0 left-0 w-full h-[120px] bg-gradient-to-b from-[#E6F5EE] to-transparent pointer-events-none"></div>
-              <div className="absolute top-5 left-5 z-0">
-                <img src="/images/file-edit.svg" alt="Edit" className="w-16 h-16 opacity-70" />
+              {/* Smooth Background Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#E6F5EE] via-white to-white pointer-events-none z-0"></div>
+              
+              {/* Card Icon */}
+              <div className="absolute top-5 left-5 z-10">
+                <img src="/images/file-edit.svg" alt="Edit" className="w-[68px] h-[68px]" />
               </div>
-              <div className="flex justify-end mb-8 relative z-10">
-                <span className="bg-[#FFF4E5] text-[#F58220] text-[11px] font-bold px-3 py-1 rounded-full uppercase shrink-0">
+              
+              {/* Badge */}
+              <div className="flex justify-end mb-8 relative z-20">
+                <span className="bg-[#FFF4E5] text-[#F58220] text-[11px] font-bold px-3 py-1 rounded-full uppercase border border-[#FFE0B2] shrink-0">
                   Due in 2 Days
                 </span>
               </div>
-              <div className="relative z-10 flex-1 flex flex-col h-full justify-end">
+              
+              {/* Content */}
+              <div className="relative z-20 flex-1 flex flex-col h-full justify-end mt-3">
                 <h3 className="text-[15px] font-bold text-gray-900 leading-snug mb-3">
                   Assignment: Obstetric Case- Third Trimester Bleeding
                 </h3>
@@ -158,14 +184,21 @@ export default function OverviewPage() {
           </div>
 
           {/* Card 3 - Mentorship (Orange) */}
-          <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#FAD0A5] via-[#FFF3E3] to-transparent flex flex-col min-h-[260px]">
+          <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#FAD0A5] via-transparent to-[#FAD0A5] flex flex-col min-h-[260px]">
             <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <div className="absolute top-0 left-0 w-full h-[120px] bg-gradient-to-b from-[#FFF3E3] to-transparent pointer-events-none"></div>
-              <div className="absolute top-5 left-5 z-0">
-                <img src="/images/User2.svg" alt="User" className="w-16 h-16 opacity-70" />
+              {/* Smooth Background Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#FFF3E3] via-white to-white pointer-events-none z-0"></div>
+              
+              {/* Card Icon */}
+              <div className="absolute top-5 left-5 z-10">
+                <img src="/images/User2.svg" alt="User" className="w-[68px] h-[68px]" />
               </div>
-              <div className="h-6 mb-8 relative z-10"></div>
-              <div className="relative z-10 flex-1 flex flex-col h-full justify-end">
+              
+              {/* Empty Badge Spacer */}
+              <div className="h-6 mb-8 relative z-20"></div>
+              
+              {/* Content */}
+              <div className="relative z-20 flex-1 flex flex-col h-full justify-end mt-3">
                 <h3 className="text-[15px] font-bold text-gray-900 leading-snug mb-3">
                   1:1 Mentorship with Dr. Nikhitha Vimal
                 </h3>
@@ -178,14 +211,22 @@ export default function OverviewPage() {
             </div>
           </div>
 
-      <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#9FE4EE] via-[#E6F8FA] to-transparent flex flex-col min-h-[260px]">
+          {/* Card 4 - Cohort (Blue) */}
+          <div className="relative rounded-[18px] p-[1.5px] bg-gradient-to-br from-[#9FE4EE] via-transparent to-[#9FE4EE] flex flex-col min-h-[260px]">
             <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <div className="absolute top-0 left-0 w-full h-[120px] bg-gradient-to-b from-[#E6F8FA] to-transparent pointer-events-none"></div>
-              <div className="absolute top-5 left-5 z-0">
-                <img src="/images/team.svg" alt="Team" className="w-16 h-16 opacity-70" />
+              {/* Smooth Background Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#E6F8FA] via-white to-white pointer-events-none z-0"></div>
+              
+              {/* Card Icon */}
+              <div className="absolute top-5 left-5 z-10">
+                <img src="/images/team.svg" alt="Team" className="w-[68px] h-[68px]" />
               </div>
-              <div className="h-6 mb-8 relative z-10"></div>
-              <div className="relative z-10 flex-1 flex flex-col h-full justify-end">
+              
+              {/* Empty Badge Spacer */}
+              <div className="h-6 mb-8 relative z-20"></div>
+              
+              {/* Content */}
+              <div className="relative z-20 flex-1 flex flex-col h-full justify-end mt-3">
                 <h3 className="text-[15px] font-bold text-gray-900 leading-snug mb-3">
                   Cohort: Drug Dose Calculation Exercise with Dr. Rao
                 </h3>
@@ -213,7 +254,7 @@ export default function OverviewPage() {
             </div>
             
             <div className="border border-teal-50 rounded-xl p-4 bg-teal-50/20">
-              <h3 className="text-[13px] font-bold text-gray-900 mb-2">Cohort: Major Insights on Human Nervous System with Dr. Rao</h3>
+              <h3 className="text-[14px] font-bold text-gray-900 mb-2">Cohort: Major Insights on Human Nervous System with Dr. Rao</h3>
               <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-4">
                 <span className="flex items-center gap-1 whitespace-nowrap"><Calendar size={12} /> 21 Feb, 2026</span>
                 <span className="flex items-center gap-1 whitespace-nowrap"><Clock size={12} /> 3:00 PM</span>
@@ -222,7 +263,7 @@ export default function OverviewPage() {
             </div>
 
             <div className="border border-orange-50 rounded-xl p-4 bg-orange-50/20">
-              <h3 className="text-[13px] font-bold text-gray-900 mb-2">Cohort: Major Insights on Human Nervous System with Dr. Rao</h3>
+              <h3 className="text-[14px] font-bold text-gray-900 mb-2">Cohort: Major Insights on Human Nervous System with Dr. Rao</h3>
               <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-4">
                 <span className="flex items-center gap-1 whitespace-nowrap"><Calendar size={12} /> 23 Feb, 2026</span>
                 <span className="flex items-center gap-1 whitespace-nowrap"><Clock size={12} /> 3:00 PM</span>
