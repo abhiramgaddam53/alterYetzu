@@ -194,12 +194,13 @@ export default function AssignmentSlugPage() {
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     className={`border-2 border-dashed rounded-[16px] p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-all ${
-                      isDragging ? "border-[#042BFD] bg-[#EEF2FF]" : "border-[#C7D2FE] bg-[#F5F7FF] hover:bg-[#EEF2FF]"
+                      isDragging ? "border-[#042BFD] bg-[#EEF2FF]" : "border-[#C7D2FE] bg-white "
                     }`}
-                  >
+                  >  
+                    <div className="invisible" >Dummy</div>
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
-                        <UploadCloud size={24} className="text-[#042BFD]" strokeWidth={1.5} />
+                       <img src="/images/upload.svg" alt="Upload" />
                       </div>
                       <div>
                         <h4 className="text-[15px] font-bold text-gray-900 mb-1">
@@ -212,7 +213,7 @@ export default function AssignmentSlugPage() {
                     </div>
                     <button 
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full md:w-auto bg-white border border-[#C7D2FE] text-[#042BFD] text-[14px] font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shrink-0 shadow-sm"
+                      className="w-full md:w-auto bg-[#f6f8ff]    border border-[#C7D2FE] text-[#042BFD] text-[14px] font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-100 transition-colors shrink-0 shadow-sm"
                     >
                       Browse Files
                     </button>
