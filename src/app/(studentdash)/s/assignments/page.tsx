@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Link as LinkIcon, Download } from "lucide-react";
+import { Search, Link as LinkIcon } from "lucide-react";
+import Link from "next/link";
 
 // Mock data to match the exact screenshots provided
 const MOCK_ASSIGNMENTS = [
@@ -10,6 +11,7 @@ const MOCK_ASSIGNMENTS = [
     title: "Advanced Insights into Cardiac Arrhythmias",
     sessionName: "Webinar: Breakthroughs in Cognitive Neurosciencebinar:",
     mentorImage: "https://ui-avatars.com/api/?name=Dr+Sophia&background=random",
+    mentorName: "Dr. Sophia Tyler",
     status: "OVERDUE",
     date: "26 FEB, 2026",
     type: "pending",
@@ -20,6 +22,7 @@ const MOCK_ASSIGNMENTS = [
     title: "Breaking Down the Latest Trends in Machine Learning",
     sessionName: "Cohort: The Rise of Edge Computing",
     mentorImage: "https://ui-avatars.com/api/?name=John+Doe&background=random",
+    mentorName: "John Doe",
     status: "DUE",
     date: "1 MAR, 2026",
     type: "pending",
@@ -30,6 +33,7 @@ const MOCK_ASSIGNMENTS = [
     title: "Understanding Blockchain's Impact on Finance",
     sessionName: "1:1 Mentorship: The Rise of Edge Computing",
     mentorImage: "https://ui-avatars.com/api/?name=Jane+Smith&background=random",
+    mentorName: "Jane Smith",
     status: "DUE",
     date: "13 APR, 2026",
     type: "pending",
@@ -39,7 +43,8 @@ const MOCK_ASSIGNMENTS = [
     id: 4,
     title: "Sustainable Energy Solutions for Tomorrow",
     sessionName: "1:1 Mentorship: The Rise of Edge Computing",
-    mentorImage: "https://ui-avatars.com/api/?name=Dr+Tyler&background=random",
+    mentorImage: "https://ui-avatars.com/api/?name=Dr+Sophia&background=random",
+    mentorName: "Dr. Sophia Tyler",
     status: "DUE",
     date: "10 JULY, 2026",
     type: "pending",
@@ -50,6 +55,7 @@ const MOCK_ASSIGNMENTS = [
     title: "Advanced Insights into Cardiac Arrhythmias",
     sessionName: "Webinar: Breakthroughs in Cognitive Neurosciencebinar:",
     mentorImage: "https://ui-avatars.com/api/?name=Dr+Sophia&background=random",
+    mentorName: "Dr. Sophia Tyler",
     status: "SUBMITTED ON",
     date: "09 FEB, 2026",
     type: "completed",
@@ -60,6 +66,7 @@ const MOCK_ASSIGNMENTS = [
     title: "Understanding Blockchain's Impact on Finance",
     sessionName: "Webinar: Breakthroughs in Cognitive Neurosciencebinar:",
     mentorImage: "https://ui-avatars.com/api/?name=Jane+Smith&background=random",
+    mentorName: "Jane Smith",
     status: "SUBMITTED ON",
     date: "02 FEB, 2026",
     type: "completed",
@@ -98,8 +105,8 @@ const getColorStyles = (colorScheme: string) => {
       return {
         wrapperBorder: "from-[#E2E8F0] via-transparent to-[#E2E8F0]",
         bgGradient: "from-[#F8FAFC] via-white via-40% to-white",
-        badgeBg: "bg-transparent",
-        badgeText: "text-[#64748B]",
+        badgeBg: "bg-[#F1F5F9]",
+        badgeText: "text-[#475569]",
         image: "/images/file-format-gray.svg"
       };
   }
@@ -178,61 +185,72 @@ export default function AssignmentPage() {
         </div>
 
         {/* Grid of Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredAssignments.map((item) => {
             const styles = getColorStyles(item.colorScheme);
 
             return (
               <div
                 key={item.id}
-                className={`relative rounded-[18px] p-[1.5px] bg-gradient-to-br ${styles.wrapperBorder} flex flex-col min-h-[260px]`}
+                className={`relative rounded-[20px] p-[1px] bg-gradient-to-br ${styles.wrapperBorder} flex flex-col min-h-[280px]`}
               >
-                <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-5 overflow-hidden h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50">
+                <div className="relative flex-1 flex flex-col bg-white rounded-[18px] p-6 overflow-hidden h-full shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/50">
                   
                   {/* Smooth Background Gradient inside card */}
-                  <div className={`absolute inset-0 bg-gradient-to-b ${styles.bgGradient} pointer-events-none z-0`}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-b ${styles.bgGradient} pointer-events-none z-0 opacity-60`}></div>
                   
                   {/* Top Row: Icon & Badge */}
                   <div className="flex justify-between items-start mb-6 relative z-10">
                     <img 
                       src={styles.image}
                       alt="Icon" 
-                      className="w-[52px] h-[52px] object-contain" 
+                      className="w-[54px] h-[54px] object-contain opacity-90" 
                     />
-                    <span className={`${styles.badgeBg} ${styles.badgeText} text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide`}>
+                    <span className={`${styles.badgeBg} ${styles.badgeText} text-[11px] font-medium px-3.5 py-1.5 rounded-full tracking-wide uppercase`}>
                       {item.status}: {item.date}
                     </span>
                   </div>
 
                   {/* Title */}
                   <div className="relative z-10 flex-1 flex flex-col">
-                    <h3 className="text-[15px] font-bold text-gray-900 mb-5 leading-snug pr-2">
+                    <Link href={`/s/assignments/${item.title}`} className="text-[17px] hover:underline font-bold text-gray-900 mb-5 leading-snug pr-2">
                       {item.title}
-                    </h3>
+                    </Link>
 
                     {/* Gray Session Box */}
-                    <div className="flex items-center justify-between bg-[#F8FAFC] rounded-[10px] p-3 mb-5 mt-auto border border-gray-100">
+                    <div className="flex items-center justify-between bg-[#F8FAFC] rounded-[12px] p-3 mb-5 mt-auto border border-gray-100/80">
                       <div className="flex items-start gap-2.5 pr-2">
-                        <LinkIcon size={14} className="text-gray-400 mt-0.5 shrink-0" />
-                        <span className="text-[12px] text-gray-600 line-clamp-2 leading-relaxed">
+                        <LinkIcon size={16} className="text-gray-500 mt-0.5 shrink-0" strokeWidth={1.5} />
+                        <span className="text-[14px] text-gray-800 leading-snug">
                           {item.sessionName}
                         </span>
                       </div>
-                      <img 
-                        src={item.mentorImage} 
-                        alt="Mentor" 
-                        className="w-7 h-7 rounded-full shrink-0 object-cover" 
-                      />
+                      
+                      {/* Avatar with Custom Tooltip */}
+                      <div className="relative group shrink-0">
+                        <img 
+                          src={item.mentorImage} 
+                          alt={item.mentorName} 
+                          className="w-8 h-8 rounded-full object-cover cursor-pointer hover:ring-2 hover:ring-gray-200 transition-all" 
+                        />
+                        
+                        {/* Tooltip Content (Below Avatar, Pointing Up) */}
+                        <div className="absolute top-[calc(100%+12px)] right-[-6px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 w-max">
+                          <div className="bg-[#262626] text-white text-[14px] font-medium px-4 py-2 rounded-[8px] shadow-xl relative">
+                            {item.mentorName}
+                            {/* Up pointing triangle pointer */}
+                            <div className="absolute -top-1.5 right-[16px] w-3 h-3 bg-[#262626] rotate-45 rounded-sm"></div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex gap-2.5">
-                      <button className="flex-1 border border-[#042BFD] text-[#042BFD] bg-white rounded-lg py-2.5 text-[13px] font-medium hover:bg-blue-50 transition-colors">
-                        {item.type === "pending" ? "Submit Assignment" : "Download Answer"}
-                      </button>
-                      <button className="p-2.5 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors flex items-center justify-center shrink-0">
-                        <Download size={18} strokeWidth={1.5} />
-                      </button>
+                    {/* Button (Right Aligned) */}
+                    <div className="flex justify-end">
+                      <Link href={`/s/assignments/${item.title}`} className="border border-[#042BFD] text-[#042BFD] bg-white rounded-[10px] px-6 py-2 text-[14px] font-medium hover:bg-blue-50 transition-colors">
+                        Open Workspace
+                      </Link>
                     </div>
                   </div>
 

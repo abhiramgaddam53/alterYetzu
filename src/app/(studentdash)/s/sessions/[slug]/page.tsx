@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { 
   ChevronRight, 
@@ -9,12 +9,15 @@ import {
   Timer, 
   Users, 
   Link2, 
-  Download 
+  Download, 
+  MoreVertical,
+  Monitor,
+  X
 } from "lucide-react";
 
 // Mock Data for the specific session
 const SESSION_DATA = {
-  type: "Webinar",
+  type: "Mentorship",
   title: "Management of Acute Coronary Syndromes: Evidence-Based Updates",
   mentor: {
     name: "Dr. Sophia Tyler",
@@ -54,10 +57,38 @@ const SESSION_DATA = {
     }
   ]
 };
+const MOCK_TIME_SLOTS = [
+  { id: 1, date: "Feb 13, 2026", time: "10:00 AM - 11:00 AM" },
+  { id: 2, date: "Feb 13, 2026", time: "02:00 PM - 03:00 PM" },
+  { id: 3, date: "Feb 14, 2026", time: "11:00 AM - 12:00 PM" },
+  { id: 4, date: "Feb 13, 2026", time: "03:30 PM - 04:30 PM" },
+  { id: 5, date: "Feb 14, 2026", time: "10:30 AM - 11:30 PM" },
+];
 
 export default function SessionSlugPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isRescheduleOpen, setIsRescheduleOpen] = useState(false); 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [selectedSlots, setSelectedSlots] = useState<number[]>([]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleSlot = (id: number) => {
+    setSelectedSlots(prev => 
+      prev.includes(id) ? prev.filter(slotId => slotId !== id) : [...prev, id]
+    );
+  };
   return (
-    <div className="w-full min-h-screen bg-[#F8F9FA] p-4 md:p-8 font-sans">
+    <div className="w-full min-h-screen bg-[#F8F9FA] mt-4 p-4 md:p-8 font-sans">
       <div className="max-w-[1600px] mx-auto">
         
         {/* Breadcrumb */}
@@ -105,12 +136,52 @@ export default function SessionSlugPage() {
                 <img src="/images/google-video.svg" alt="Meet" className="w-5 h-5 object-contain" />
                 Join Now
               </button>
-              <button className="border border-[#042BFD] text-[#042BFD] hover:bg-blue-50 px-6 py-2.5 rounded-xl text-[14px] font-medium transition-colors">
-                Reschedule
-              </button>
-              <button className="p-2.5 border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-colors shrink-0">
-                <Link2 size={20} strokeWidth={2} />
-              </button>
+              <div className="relative flex items-center" ref={dropdownRef}>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMenuOpen(!isMenuOpen);
+                  }}
+                  className={`w-11 h-11 border rounded-xl flex items-center justify-center transition-colors shrink-0 ${isMenuOpen ? 'border-gray-300 bg-gray-50 text-gray-900' : 'border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
+                >
+                  <MoreVertical size={20} strokeWidth={2} className="pointer-events-none" />
+                </button>
+
+                {/* Popup Menu - Pinned exactly relative to the button */}
+                {isMenuOpen && (
+                  <div className="absolute right-0 top-[115%] w-[220px] bg-white border border-gray-200 rounded-[12px] shadow-[0_8px_30px_rgba(0,0,0,0.12)] py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
+                    <button 
+                      className="w-full text-left px-5 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setIsRescheduleOpen(true); // Open the reschedule modal
+                      }}
+                    >
+                      Reschedule
+                    </button>
+                    <button 
+                      className="w-full text-left px-5 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Copy Link to Interview
+                    </button>
+                    
+                    {SESSION_DATA.type.toLowerCase() === 'mentorship' && (
+                      <button 
+                        className="w-full text-left px-5 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Chat with Mentor
+                      </button>
+                    )}
+                    
+                    <div className="h-[1px] bg-gray-100 my-1.5"></div>
+                    <div className="px-5 py-2 text-[13px] font-medium text-gray-400">
+                      {SESSION_DATA.type} Session
+                    </div>
+                  </div>
+                )}
+                </div>
             </div>
           </div>
 
@@ -154,10 +225,10 @@ export default function SessionSlugPage() {
                   key={assignment.id} 
                   className="border border-gray-200 rounded-2xl p-5 flex flex-col justify-between hover:border-gray-300 transition-colors bg-white h-full"
                 >
-                  <div className="flex gap-4 items-start mb-6">
+                  <div className="flex gap-4 items-start mb-4">
                     {/* Custom Gray SVG Icon */}
                     <img 
-                      src="/images/file-format.svg" 
+                      src="/images/green-file.svg" 
                       alt="Assignment" 
                       className="w-[48px] h-[48px] shrink-0 object-contain" 
                     />
@@ -217,6 +288,116 @@ export default function SessionSlugPage() {
         </div>
 
       </div>
+      {isRescheduleOpen && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          {/* Overlay (makes the rest of the screen dull) */}
+          <div 
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
+            onClick={() => setIsRescheduleOpen(false)}
+          ></div>
+          
+          {/* Slide-over Content */}
+          <div className="relative bg-white w-full max-w-[480px] h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+            
+            <div className="flex-1 overflow-y-auto p-6  custom-scrollbar">
+              
+              {/* Header Icon & Close */}
+              <div className="flex justify-between items-start mb-3">
+                <div className="w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center shadow-sm">
+                  <Monitor size={20} className="text-gray-700" />
+                </div>
+                <button onClick={() => setIsRescheduleOpen(false)} className="p-1 text-gray-400 hover:text-gray-900 transition-colors -mr-2">
+                  <X size={22} strokeWidth={1.5} />
+                </button>
+              </div>
+
+              <h2 className="text-[22px] font-bold text-gray-900 mb-4">Reschedule Session</h2>
+
+              {/* Current Session Box */}
+              <div className="bg-[#F8FAFC] border border-gray-100 rounded-[12px] p-5 mb-8">
+                <p className="text-[12px] text-gray-500 mb-2 font-medium">Current Session</p>
+                <h3 className="text-[16px] font-bold text-gray-900 mb-2.5 leading-snug">Research Methodology Session</h3>
+                <div className="flex items-center gap-4 text-[13px] text-gray-700 mb-2">
+                  <div className="flex items-center gap-1.5"><Calendar size={14} className="text-gray-500"/> 2026-02-11</div>
+                  <div className="flex items-center gap-1.5"><Clock size={14} className="text-gray-500"/> 10:30 - 11:30</div>
+                </div>
+                <p className="text-[13px] text-gray-500">with Pradhyumn Dhondi</p>
+              </div>
+
+              {/* Reason Textarea */}
+              <div className="mb-8">
+                <label className="block text-[13px] font-bold text-gray-900 mb-3">
+                  Reason for Rescheduling <span className="text-gray-900">*</span>
+                </label>
+                <textarea 
+                  className="w-full border border-gray-200 rounded-[12px] p-4 text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#042BFD]/20 focus:border-[#042BFD] min-h-[110px] resize-none transition-all"
+                  placeholder="Please provide a brief explanation for the student..."
+                ></textarea>
+              </div>
+
+              {/* Suggest Alternative Times Grid */}
+              <div className="mb-8">
+                <label className="block text-[13px] font-bold text-gray-900 mb-3">
+                  Suggest Alternative Times <span className="text-gray-900">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  {MOCK_TIME_SLOTS.map((slot) => {
+                    const isSelected = selectedSlots.includes(slot.id);
+                    return (
+                      <div 
+                        key={slot.id}
+                        onClick={() => toggleSlot(slot.id)}
+                        className={`border rounded-[12px] p-3.5 cursor-pointer transition-all ${
+                          isSelected 
+                            ? 'border-[#042BFD] bg-[#F5F6FF]' 
+                            : 'border-gray-200 hover:border-[#042BFD] hover:bg-[#F5F6FF]/50'
+                        }`}
+                      >
+                        <p className={`text-[14px] font-bold mb-1.5 ${isSelected ? 'text-[#042BFD]' : 'text-gray-900'}`}>
+                          {slot.date}
+                        </p>
+                        <p className={`text-[13px] ${isSelected ? 'text-[#042BFD]/80 font-medium' : 'text-gray-500'}`}>
+                          {slot.time}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-[13px] text-gray-500">Select one or more time slots to offer the student</p>
+              </div>
+
+              {/* Additional Message Textarea */}
+              <div className="mb-4">
+                <label className="block text-[13px] font-bold text-gray-900 mb-3">
+                  Additional Message (Optional)
+                </label>
+                <textarea 
+                  className="w-full border border-gray-200 rounded-[12px] p-4 text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#042BFD]/20 focus:border-[#042BFD] min-h-[100px] resize-none transition-all"
+                  placeholder="Add any additional context for the student..."
+                ></textarea>
+              </div>
+
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="p-6 md:p-8 flex items-center gap-4 border-t border-gray-100 bg-white shrink-0">
+              <button 
+                onClick={() => setIsRescheduleOpen(false)}
+                className="flex-1 py-3.5 border border-gray-200 rounded-[10px] text-[14px] font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => setIsRescheduleOpen(false)}
+                className="flex-1 py-3.5 bg-[#042BFD] rounded-[10px] text-[14px] font-bold text-white hover:bg-blue-700 transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

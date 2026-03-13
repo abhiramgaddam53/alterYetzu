@@ -23,6 +23,7 @@ import {
 import Image from "next/image";
 import { useLogoutMutation } from "@/lib/queries/identityService/useIdentityService";
 import useSession from "@/hooks/useSession";
+import DiscoverCoursesPromo from "../ui/DiscoverCoursesPromo";
 
 interface DashSidebarProps {
     role: string | null;
@@ -94,7 +95,7 @@ export default function DashSidebar({ role, isOpen, onClose }: DashSidebarProps)
             )}
 
             <aside className={`
-                fixed top-0 left-0 z-50 h-full w-[230px] bg-white border-r border-gray-200 
+                fixed top-0 left-0 z-50 h-full w-[260px] bg-white border-r border-gray-200 
                 transform transition-transform duration-300 ease-in-out flex flex-col
                 ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
             `}>
@@ -140,7 +141,9 @@ export default function DashSidebar({ role, isOpen, onClose }: DashSidebarProps)
 
                     {/* Bottom Actions Section */}
                     <div className="pt-6 mt-6 space-y-1.5 border-t border-transparent">
-                        
+                    <div className="mt-auto px-1 pb-6">
+                        <DiscoverCoursesPromo />
+                        </div>
                         {/* Billing & Payments with Sub-menu */}
                         <div>
                             <button 

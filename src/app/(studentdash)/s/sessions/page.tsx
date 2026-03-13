@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Search, Calendar, Clock, MoreVertical, Link2 } from "lucide-react";
 import Link from "next/link"; 
+import RescheduleModal from "../../components/Reschedule";
 
 // Mock Data
 const MOCK_SESSIONS = [
@@ -188,7 +189,7 @@ export default function SessionsPage() {
   const filteredSessions = MOCK_SESSIONS.filter((s) => s.tab === activeTab);
   const focusTodaySessions = filteredSessions.filter((s) => s.isFocusToday);
   const otherSessions = filteredSessions.filter((s) => !s.isFocusToday);
-
+  const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -210,7 +211,7 @@ export default function SessionsPage() {
         key={session.id}
         className={`relative rounded-[18px] p-[1.5px] bg-gradient-to-br ${theme.wrapperBorder} flex flex-col min-h-[300px]`}
       >
-        <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-6 h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50">
+        <div className="relative flex-1 flex flex-col bg-white rounded-[16px] p-4 h-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100/50">
           
           <div className={`absolute inset-0 rounded-[16px] bg-gradient-to-b ${theme.bgGradient} pointer-events-none z-0`}></div>
 
@@ -280,10 +281,14 @@ export default function SessionsPage() {
                 >
                   <button 
                     className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setOpenDropdownId(null)}
+                    onClick={() => {
+                      setOpenDropdownId(null);   // 1. Close the dropdown menu
+                      setIsRescheduleOpen(true); // 2. Open the Reschedule modal
+                    }}
                   >
                     Reschedule
                   </button>
+                
                   <button 
                     className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     onClick={() => setOpenDropdownId(null)}
@@ -367,7 +372,7 @@ export default function SessionsPage() {
                   <div className="flex-1 h-px bg-gray-200"></div>
                 </div>
                 {/* Fixed to max 3 columns */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {focusTodaySessions.map((session) => renderCard(session, true))}
                 </div>
               </div>
@@ -383,7 +388,7 @@ export default function SessionsPage() {
                   <div className="flex-1 h-px bg-gray-200"></div>
                 </div>
                 {/* Fixed to max 3 columns */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {otherSessions.map((session) => renderCard(session, false))}
                 </div>
               </div>
@@ -391,7 +396,7 @@ export default function SessionsPage() {
           </>
         ) : (
           /* Completed / Missed Tab View */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
             {filteredSessions.map((session) => renderCard(session, false))}
             
             {filteredSessions.length === 0 && (
@@ -403,6 +408,10 @@ export default function SessionsPage() {
         )}
 
       </div>
+      <RescheduleModal 
+                      isOpen={isRescheduleOpen} 
+                      onClose={() => setIsRescheduleOpen(false)} 
+                    />
     </div>
   );
 }

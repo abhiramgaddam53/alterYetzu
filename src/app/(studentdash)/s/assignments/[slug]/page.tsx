@@ -1,341 +1,355 @@
 "use client";
 
-import React, { useState } from "react";
-import { useParams } from "next/navigation";
-import { ASSIGNMENTS_DATA } from "../../../constants"; // Adjust path
-import {
-  Calendar,
-  Clock,
-  MoreVertical,
-  Plus,
+import React, { useState, useRef } from "react";
+import Link from "next/link";
+import { 
+  ChevronRight, 
+  Download, 
+  UploadCloud, 
   Send,
-  FileText,
-  Download,
-  ArrowLeft,
- } from "lucide-react";
+  X
+} from "lucide-react";
 
-export default function AssignmentDetailsPage() {
-  const params = useParams();
-  const [activeTab, setActiveTab] = useState<"Webinar" | "Assignment">("Webinar");
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
+// --- MOCK DATA ---
+const ASSIGNMENT_DATA = {
+  title: "Advanced Insights into Cardiac Arrhythmias",
+  // Change this date to test the badge colors (e.g., set to a past date for Red)
+  dueDate: new Date(Date.now() + 86400000 * 1).toISOString(), // Sets mock date to tomorrow (1 day left)
+  mentor: {
+    name: "Dr. Sophia Tyler",
+    session: "Webinar: Breakthroughs in Cognitive Neurosciencebinar",
+    avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+  },
+  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  resources: [
+    { id: 1, name: "Session Reading Material fo..." },
+    { id: 2, name: "Reference Article.pdf" },
+    { id: 3, name: "Insights into Coronary.pdf" },
+  ]
+};
 
-  // Find Data
-  const pageData = ASSIGNMENTS_DATA.find((item) => item.slug === params.slug);
+// --- HELPER FUNCTION FOR BADGE LOGIC ---
+const getBadgeDetails = (dueDateStr: string) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDateStr);
+  due.setHours(0, 0, 0, 0);
 
-  if (!pageData) {
-    return <div className="p-10 text-center font-inter text-gray-500">Assignment not found</div>;
+  const diffTime = due.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  const formattedDate = due.toLocaleDateString('en-GB', { 
+    day: 'numeric', month: 'short', year: 'numeric' 
+  }).toUpperCase();
+
+  if (diffDays < 0) {
+    return { text: `OVERDUE: ${formattedDate}`, color: "bg-[#FFF0F2] text-[#E11D48]" };
+  } else if (diffDays <= 2) {
+    return { text: `DUE IN ${diffDays} DAY${diffDays > 1 ? 'S' : ''}`, color: "bg-[#FFF7ED] text-[#EA580C]" };
+  } else {
+    return { text: `DUE: ${formattedDate}`, color: "bg-[#F1F5F9] text-[#64748B]" };
   }
+};
 
-  // Handle Tab Switching
-  const handleTabChange = (tab: "Webinar" | "Assignment") => {
-    setActiveTab(tab);
-    if (tab === "Webinar") setSelectedAssignmentId(null);
+export default function AssignmentSlugPage() {
+  // State to manage files and UI phases
+  const [uploadedFiles, setUploadedFiles] = useState<{id: string, file: File}[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // --- DYNAMIC BADGE LOGIC ---
+  const badge = getBadgeDetails(ASSIGNMENT_DATA.dueDate);
+
+  // --- FILE UPLOAD HANDLERS ---
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).map(file => ({
+        id: Math.random().toString(36).substr(2, 9),
+        file
+      }));
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files) {
+      const newFiles = Array.from(e.dataTransfer.files).map(file => ({
+        id: Math.random().toString(36).substr(2, 9),
+        file
+      }));
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const handleRemoveFile = (id: string) => {
+    setUploadedFiles(prev => prev.filter(f => f.id !== id));
+  };
+
+  const handleSubmit = () => {
+    if (uploadedFiles.length > 0) {
+      setIsSubmitted(true);
+    }
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#F9FAFB] p-4 md:p-6 font-['Inter']">
-  
-
-      {/* 2. Tabs */}
-      <div className="flex gap-4 mb-8 border-b border-gray-200 pb-1">
-        <button
-          onClick={() => handleTabChange("Webinar")}
-          className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-            activeTab === "Webinar"
-              ? "bg-[#042BFD] text-white shadow-md shadow-blue-200"
-              : "text-gray-500 hover:text-gray-900"
-          }`}
-        >
-          Webinar
-        </button>
-        <button
-          onClick={() => handleTabChange("Assignment")}
-          className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-            activeTab === "Assignment"
-              ? "bg-[#042BFD] text-white shadow-md shadow-blue-200"
-              : "text-gray-500 hover:text-gray-900"
-          }`}
-        >
-          Assignments
-        </button>
-      </div>
-
-      {/* 3. Content Area */}
-      <div className="max-w-7xl mx-auto">
-        {activeTab === "Webinar" && (
-          <WebinarView data={pageData} />
-        )}
-
-        {activeTab === "Assignment" && !selectedAssignmentId && (
-          <AssignmentListView 
-            assignments={pageData.assignments || []} 
-            onSelect={(id) => setSelectedAssignmentId(id)}
-          />
-        )}
-
-        {activeTab === "Assignment" && selectedAssignmentId && (
-          <AssignmentDetailView 
-            assignment={pageData.assignments?.find(a => a.id === selectedAssignmentId)}
-            mentor={pageData.mentor}
-            onBack={() => setSelectedAssignmentId(null)}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-// --- 1. WEBINAR VIEW (Updated for Mobile Ordering) ---
-function WebinarView({ data }: { data: any }) {
-  return (
-    // CHANGE: Added 'flex flex-col' for mobile stacking control
-    <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8">
-      
-      {/* Left Column: Timeline & Hero */}
-      {/* CHANGE: Added 'order-2 lg:order-1' -> Bottom on mobile, Left on desktop */}
-      {/* <div className="lg:col-span-2 flex flex-col gap-8 order-2 lg:order-1">
-        <div className="relative w-full h-48 md:h-80 bg-gray-200 rounded-[20px] overflow-hidden flex items-center justify-center text-gray-400">
-           Webinar Hero Image
+    <div className="w-full min-h-screen bg-[#F8F9FA] p-4 md:p-8 mt-2 font-sans">
+      <div className="max-w-[1600px] mx-auto">
+        
+        {/* --- BREADCRUMBS --- */}
+        <div className="flex items-center gap-2 text-[13px] font-medium mb-6 px-2 text-gray-500">
+          <Link href="/s/sessions" className="hover:text-gray-900 transition-colors">
+            Sessions
+          </Link>
+          <ChevronRight size={14} className="text-gray-400" />
+          <span className="text-gray-500 truncate">
+            Webinar: Management of Acute Coronary Syndromes: Evidence-Based Updates
+          </span>
         </div>
 
-        <div className="bg-white p-6 md:p-8 rounded-[20px] border border-gray-100">
-          <div className="relative pl-2">
-            <div className="absolute left-[11px] top-2 bottom-4 w-[2px] bg-blue-100"></div>
-            {data.webinar.timeline.map((item: any, index: number) => (
-              <div key={index} className="relative flex gap-6 mb-8 last:mb-0 group">
-                <div className="relative z-10 w-6 h-6 rounded-full bg-[#042BFD] border-4 border-white shadow-sm flex-shrink-0 mt-1"></div>
+        {/* --- MAIN GRID --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* ================= LEFT COLUMN (Col span 2) ================= */}
+          <div className="lg:col-span-2 flex flex-col gap-6">
+            
+            {/* 1. Assignment Details Card */}
+            <div className="bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 md:p-8">
+              
+              {/* Header Row with Dynamic Badge */}
+              <div className="flex flex-col md:flex-row md:items-start justify-start gap-4 mb-6">
+                <h1 className="text-[22px] md:text-[24px] font-bold text-gray-900 leading-snug">
+                  {ASSIGNMENT_DATA.title}
+                </h1>
+                <span className={`shrink-0 ${badge.color} text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider mt-1`}>
+                  {badge.text}
+                </span>
+              </div>
+
+              {/* Mentor Info */}
+              <div className="flex items-center gap-3 mb-8">
+                <img 
+                  src={ASSIGNMENT_DATA.mentor.avatar} 
+                  alt={ASSIGNMENT_DATA.mentor.name} 
+                  className="w-11 h-11 rounded-full object-cover shrink-0" 
+                />
                 <div>
-                  <h4 className="text-lg font-semibold text-[#021165] mb-1">{item.title}</h4>
-                  <p className="text-xs text-gray-500 font-medium mb-2">{item.time}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
+                  <h3 className="text-[15px] font-bold text-gray-900">
+                    {ASSIGNMENT_DATA.mentor.name}
+                  </h3>
+                  <p className="text-[13px] text-gray-500">
+                    {ASSIGNMENT_DATA.mentor.session}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div> */}
-<div className="lg:col-span-2 flex flex-col gap-8 order-2 lg:order-1 font-inter">
-      {/* Webinar Hero Image */}
-      <div className="relative w-full h-48 md:h-80 bg-gray-200 rounded-[20px] overflow-hidden flex items-center justify-center text-gray-400">
-        Webinar Hero Image
-      </div>
 
-      {/* Timeline Card */}
-      <div className="bg-white p-6 md:p-8 rounded-[20px] border border-gray-100 shadow-sm">
-        <div className="relative">
-          {data.webinar.timeline.map((item: any, index: number) => (
-            <div key={index} className="relative flex gap-6 group">
+              {/* Description */}
+              <div>
+                <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">
+                  DESCRIPTION
+                </h4>
+                <p className="text-[14px] text-gray-600 leading-[1.6]">
+                  {ASSIGNMENT_DATA.description}
+                </p>
+              </div>
+
+            </div>
+
+            {/* 2. Submissions Card (Dynamic State) */}
+            <div className="bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 md:p-8">
               
-              {/* Vertical Line Logic */}
-              <div className="relative flex flex-col items-center">
-                {/* Timeline Dot */}
-                <div className="relative z-10 w-[24px] h-[24px] rounded-full bg-[#003fc7] border-4 border-white shadow-sm mt-1 flex-shrink-0" />
-                
-                {/* Vertical Line: Hidden for the last item */}
-                {index !== data.webinar.timeline.length - 1 && (
-                  <div className="w-[2px] h-full bg-[#003fc7] opacity-20 -mt-1" />
+              <h2 className="text-[18px] font-bold text-gray-900 mb-6">
+                {isSubmitted ? "Your Submissions" : "Upload Your Submissions Here"}
+              </h2>
+
+              {/* Hidden File Input */}
+              <input 
+                type="file" 
+                multiple 
+                className="hidden" 
+                ref={fileInputRef} 
+                onChange={handleFileChange}
+                accept=".pdf,.docx,.doc"
+              />
+
+              {/* State A & B: Upload Area */}
+              {!isSubmitted && (
+                <>
+                  {/* Interactive Drag & Drop Zone */}
+                  <div 
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`border-2 border-dashed rounded-[16px] p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-all ${
+                      isDragging ? "border-[#042BFD] bg-[#EEF2FF]" : "border-[#C7D2FE] bg-[#F5F7FF] hover:bg-[#EEF2FF]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+                        <UploadCloud size={24} className="text-[#042BFD]" strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <h4 className="text-[15px] font-bold text-gray-900 mb-1">
+                          Drag and Drop or Choose the file to be uploaded
+                        </h4>
+                        <p className="text-[13px] text-gray-500">
+                          • Only .docx, or .pdf file up to 20 MB
+                        </p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full md:w-auto bg-white border border-[#C7D2FE] text-[#042BFD] text-[14px] font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors shrink-0 shadow-sm"
+                    >
+                      Browse Files
+                    </button>
+                  </div>
+
+                  {/* Uploaded File List (Pre-submit) */}
+                  {uploadedFiles.length > 0 && (
+                    <div className="mt-4 flex flex-col gap-3">
+                      {uploadedFiles.map((fileObj) => (
+                        <div key={fileObj.id} className="border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 bg-white">
+                          <div className="flex items-center gap-4 min-w-0">
+                            <div className="w-11 h-11 bg-[#F5F7FF] text-[#042BFD] rounded-[12px] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0 border border-[#E0E7FF]">
+                              {fileObj.file.name.endsWith('.pdf') ? 'PDF' : 'DOC'}
+                            </div>
+                            <h4 className="text-[14px] font-medium text-gray-900 truncate pr-4">
+                              {fileObj.file.name}
+                            </h4>
+                          </div>
+                          <button 
+                            onClick={() => handleRemoveFile(fileObj.id)}
+                            className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                          >
+                            <X size={18} />
+                          </button>
+                        </div>
+                      ))}
+
+                      {/* Submit Button */}
+                      <div className="flex justify-end mt-2">
+                        <button 
+                          onClick={handleSubmit}
+                          className="bg-[#111111] hover:bg-black text-white text-[14px] font-semibold px-8 py-3 rounded-xl transition-colors shadow-md"
+                        >
+                          Submit Assignment
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* State C: Submitted Files List */}
+              {isSubmitted && (
+                <div className="flex flex-col gap-4">
+                  {uploadedFiles.map((fileObj) => (
+                    <div key={fileObj.id} className="border border-gray-200 rounded-[16px] p-4 flex items-center justify-between gap-4 bg-white hover:border-gray-300 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <div className="w-11 h-11 bg-[#F5F7FF] text-[#042BFD] rounded-[12px] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0 border border-[#E0E7FF]">
+                          {fileObj.file.name.endsWith('.pdf') ? 'PDF' : 'DOC'}
+                        </div>
+                        <h4 className="text-[14px] font-medium text-gray-900 truncate pr-4">
+                          {fileObj.file.name}
+                        </h4>
+                      </div>
+                      <button className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors shrink-0">
+                        <Download size={20} strokeWidth={1.5} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+            </div>
+          </div>
+
+          {/* ================= RIGHT COLUMN (Col span 1) ================= */}
+          <div className="flex flex-col gap-6">
+            
+            {/* 3. Resources Card */}
+            <div className="bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="text-[18px] font-bold text-gray-900">Assignment Resources</h2>
+                <span className="bg-[#F1F5F9] text-gray-600 text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full">
+                  {ASSIGNMENT_DATA.resources.length}
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {ASSIGNMENT_DATA.resources.map((resource) => (
+                  <div key={resource.id} className="border border-gray-200 rounded-[16px] p-3 flex items-center justify-between gap-3 bg-white hover:border-gray-300 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 bg-[#F5F7FF] text-[#042BFD] rounded-[10px] flex items-center justify-center text-[10px] font-bold tracking-wider shrink-0 border border-[#E0E7FF]">
+                        PDF
+                      </div>
+                      <h4 className="text-[13px] font-semibold text-gray-900 truncate">
+                        {resource.name}
+                      </h4>
+                    </div>
+                    <button className="text-gray-400 hover:text-gray-900 transition-colors shrink-0 pr-1">
+                      <Download size={18} strokeWidth={1.5} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 4. Comments Card */}
+            <div className="bg-white rounded-[24px] border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-6 md:p-8 flex flex-col h-full">
+              <h2 className="text-[18px] font-bold text-gray-900 mb-6">Add Private Comment</h2>
+
+              {/* Dynamic Comments List (Only visible after submission for the mock) */}
+              <div className="flex-1 flex flex-col justify-end min-h-[100px] mb-4">
+                {isSubmitted && (
+                  <div className="bg-[#F8FAFC] rounded-[16px] p-4 border border-gray-100">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[13px] font-bold text-gray-900">Nikhil Kamath</span>
+                      <span className="text-[11px] text-gray-400">15 Jan 2025, 04:30 PM</span>
+                    </div>
+                    <p className="text-[13px] text-gray-600 italic leading-relaxed">
+                      This is a sample comment provided for testing purposes to gather feedback. This is a sample comment provided for testing purposes to gather feedback. comment provided testing purposes.
+                    </p>
+                  </div>
                 )}
               </div>
 
-              {/* Content */}
-              <div className={`flex flex-col ${index !== data.webinar.timeline.length - 1 ? "pb-10" : "pb-0"}`}>
-                <h4 className="text-lg font-bold text-[#021165] leading-none mb-2">
-                  {item.title}
-                </h4>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[12px] font-semibold text-gray-500 bg-gray-50 px-2 py-1 rounded-md">
-                    {item.time}
-                  </span>
+              {/* Comment Input */}
+              <div className="mt-auto">
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    placeholder="Enter here" 
+                    className="w-full border border-gray-200 rounded-[14px] pl-4 pr-12 py-3.5 text-[14px] text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#042BFD] transition-all"
+                  />
+                  <button className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#042BFD] transition-colors rounded-lg">
+                    <Send size={18} strokeWidth={2} />
+                  </button>
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed max-w-xl">
-                  {item.desc}
+                <p className="text-[11px] text-gray-400 mt-2.5 pl-1">
+                  Private Comment are only visible to you and your mentor
                 </p>
               </div>
+
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
 
-      {/* Right Column: Info Card */}
-      {/* CHANGE: Added 'order-1 lg:order-2' -> Top on mobile, Right on desktop */}
-      <div className="lg:col-span-1 order-1 lg:order-2">
-        <div className="bg-white p-6 rounded-[20px] border border-gray-100 sticky top-8">
-          <h2 className="text-xl font-bold text-[#021165] mb-1">{data.title}</h2>
-          <p className="text-sm text-gray-500 mb-6">{data.subtitle}</p>
-
-          <div className="flex flex-col gap-4 mb-6">
-            <div className="flex items-center gap-3">
-               <div className="p-2 bg-blue-50 rounded-lg text-[#042BFD]">
-                 <Calendar size={20} />
-               </div>
-               <div>
-                 <p className="text-xs text-gray-500">Session Date</p>
-                 <p className="text-sm font-semibold text-gray-900">{data.webinar.date}</p>
-               </div>
-            </div>
-            <div className="flex items-center gap-3">
-               <div className="p-2 bg-blue-50 rounded-lg text-[#042BFD]">
-                 <Clock size={20} />
-               </div>
-               <div>
-                 <p className="text-xs text-gray-500">Session Time</p>
-                 <p className="text-sm font-semibold text-gray-900">{data.webinar.time}</p>
-               </div>
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-            <p className="text-xs text-gray-500 leading-relaxed">{data.webinar.description}</p>
-          </div>
-
-          <button className="w-full py-3 bg-[#042BFD] hover:bg-[#0325D7] text-white rounded-xl font-medium transition-colors shadow-lg shadow-blue-200">
-            Join Now
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// --- 2. ASSIGNMENT LIST VIEW (Updated for Mobile Scroll) ---
-function AssignmentListView({ assignments, onSelect }: { assignments: any[], onSelect: (id: string) => void }) {
-  if (!assignments || assignments.length === 0) {
-    return <div className="text-center p-10 text-gray-500">No assignments found.</div>;
-  }
-
-  return (
-    <div className="bg-white rounded-[20px] border border-gray-100 shadow-sm p-2">
-      {/* CHANGE: Added overflow-x-auto for horizontal scrolling on mobile */}
-      <div className="overflow-x-auto w-full">
-        <table className="w-full text-left border-collapse min-w-[600px]"> 
-          {/* min-w-[600px] ensures it doesn't squish on small screens, triggers scroll instead */}
-          <tbody className="divide-y divide-gray-50">
-            {assignments.map((item) => (
-              <tr
-                key={item.id}
-                onClick={() => onSelect(item.id)}
-                className="hover:bg-gray-50 transition-colors cursor-pointer group"
-              >
-                {/* ID */}
-                <td className="py-4 pl-6 text-sm text-gray-500 font-medium w-32 align-middle whitespace-nowrap">
-                  {item.id}
-                </td>
-                
-                {/* Title */}
-                <td className="py-4 text-sm font-medium text-gray-700 group-hover:text-[#042BFD] align-middle min-w-[200px]">
-                  {item.title}
-                </td>
-
-                {/* Date */}
-                <td className="py-4 text-sm text-gray-500 text-right pr-6 align-middle whitespace-nowrap">
-                  {item.uploadOn}
-                </td>
-
-                {/* Dots Action */}
-                <td className="py-4 pr-6 w-10 text-right align-middle">
-                   <MoreVertical size={18} className="text-gray-400" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-// --- 3. ASSIGNMENT DETAIL VIEW (Already Correctly Stacked via flex-col-reverse) ---
-function AssignmentDetailView({ assignment, mentor, onBack }: { assignment: any, mentor: any, onBack: () => void }) {
-  if (!assignment) return <div>Data Missing</div>;
-
-  return (
-    // 'flex-col-reverse' puts the last element (Right Col/Your Work) on top for mobile
-    // 'lg:grid' restores the side-by-side layout for desktop
-    <div className="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-8 animate-in fade-in duration-300">
-      
-      {/* Left Column: Details */}
-      <div className="lg:col-span-2 bg-white p-6 md:p-10 rounded-[20px] border border-gray-100 h-fit">
-        
-        {/* Back Link */}
-        <button onClick={onBack} className=" hidden md:flex items-center gap-1 text-xs text-gray-400 hover:text-[#021165] mb-4 transition-colors">
-          <ArrowLeft size={14} /> Back
-        </button>
-
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-[#021165] mb-2">{assignment.title}</h2>
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <div className="w-6 h-6 rounded-full bg-gray-200 overflow-hidden relative">
-                 {/* <Image /> */}
-              </div>
-              <span className="font-medium text-gray-900">{mentor.name}</span>
-              <span>•</span>
-              <span>{mentor.date}</span>
-            </div>
-          </div>
-          <button className="text-gray-400 hover:text-gray-600">
-            <MoreVertical size={20} />
-          </button>
-        </div>
-
-        <div className="mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">Assignment</h3>
-          <p className="text-sm text-gray-600 leading-relaxed">{assignment.description}</p>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Study Material</h3>
-          <div className="space-y-3">
-            {assignment.studyMaterials && assignment.studyMaterials.map((file: any, idx: number) => (
-              <div key={idx} className="flex items-center justify-between p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
-                <div className="flex items-center gap-3">
-                   <FileText className="text-gray-400 group-hover:text-[#042BFD]" size={20} />
-                   <span className="text-sm font-medium text-gray-700">{file.name}</span>
-                </div>
-                <Download size={18} className="text-gray-400 group-hover:text-[#042BFD]" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Right Column: Submission */}
-      <div className="lg:col-span-1 flex flex-col gap-6">
-        <div className="bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Your Work</h3>
-            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">Due: {assignment.dueDate}</span>
-          </div>
-
-          <div className="flex flex-col gap-3 mb-4">
-            <button className="flex items-center justify-center gap-2 w-full py-2.5 border border-[#042BFD] text-[#042BFD] rounded-lg font-medium hover:bg-blue-50 transition-colors">
-              <Plus size={18} />
-              Add or Create
-            </button>
-            <button className="w-full py-2.5 bg-[#042BFD] text-white rounded-lg font-medium hover:bg-[#0325D7] transition-colors shadow-md shadow-blue-200">
-              Hand in
-            </button>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-[20px] border border-gray-100 shadow-sm">
-           <h3 className="text-sm font-semibold text-gray-900 mb-4">Add Private Comment</h3>
-           <div className="relative">
-             <input 
-               type="text" 
-               placeholder="Input Value"
-               className="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-             />
-             <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#042BFD]">
-               <Send size={16} />
-             </button>
-           </div>
-           <p className="text-[10px] text-gray-400 mt-3 leading-tight">
-             Private Comment are only visible to you and your mentor
-           </p>
-        </div>
       </div>
     </div>
   );
