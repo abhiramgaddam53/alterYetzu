@@ -44,7 +44,7 @@ export default function DashLayout({ children, role }: DashLayoutProps) {
                     isNotificationActive={isNotificationOpen} 
                 />
 
-                <main className="lg:pl-57 pt-15 h-full overflow-hidden rounded-2xl transition-all duration-300">
+                <main className="lg:pl-57 pt-18 h-full overflow-hidden rounded-2xl transition-all duration-300">
                     {isChatOpen ? (
                         <div className="h-[calc(100vh-80px)] w-full">
                             <ChatWidget onClose={() => setIsChatOpen(false)} />
