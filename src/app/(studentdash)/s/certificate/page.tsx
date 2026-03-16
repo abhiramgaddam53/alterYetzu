@@ -58,7 +58,7 @@ export default function CertificatesPage() {
       </div>
 
       {/* Grid Section */}
-      <div className="p-6 md:px-10 max-w-[1600px] mx-auto">
+      <div className=" p-3 md:p-6 md:px-10 max-w-[1600px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
           {CERTIFICATES_DATA.map((cert) => (
             <div
