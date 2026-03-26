@@ -731,6 +731,7 @@ const MOCK_SESSIONS = [
         setSessions(MOCK_SESSIONS);
       } finally {
         setIsLoading(false);
+        setSessions(MOCK_SESSIONS);
       }
     };
 

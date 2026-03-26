@@ -483,7 +483,7 @@ export default function SessionSlugPage() {
   useEffect(() => {
     const fetchCourseDetails = async () => {
       // If we don't have a dynamic slug from the router, fallback to standard test ID
-      const targetId = slug || "69540b52ad785acc821a0106"; 
+      const targetId =   "69540b52ad785acc821a0106"; 
 
       try {
         const response = await CourseAPI.getCourseById(targetId);
@@ -553,7 +553,7 @@ export default function SessionSlugPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-white md:bg-[#F8F9FA] md:mt-4 p-0 md:p-8 font-sans pb-24 md:pb-8">
+    <div className="w-full min-h-screen bg-white md:bg-[#F8F9FA] md:mt-4 p-0 md:p-8 font-sans pb-10 md:pb-8">
       <div className="max-w-[1600px] mx-auto">
         
         {/* --- MOBILE HEADER --- */}
