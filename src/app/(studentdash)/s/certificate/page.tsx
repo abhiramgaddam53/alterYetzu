@@ -40,12 +40,12 @@ export default function CertificatesPage() {
     <div className="w-full min-h-screen bg-[#F8F9FA] font-sans">
       {/* Header Section */}
       {/* Header Sections for git */}
-      <div className="bg-white px-6 md:px-10 py-6 border-b border-gray-100">
-        <h1 className="text-[22px] font-bold text-gray-900 mb-5">
+      <div className="sticky top-0 z-20 bg-white px-6 md:px-10 pt-8 border-b border-gray-200 md:static md:z-auto">
+        <h1 className="text-[22px] font-semibold text-gray-900 mb-5">
           Ceritificates
         </h1>
         
-        <div className="relative max-w-md">
+        <div className="relative max-w-md my-4">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-gray-400" />
           </div>
@@ -59,7 +59,7 @@ export default function CertificatesPage() {
 
       {/* Grid Section */}
       <div className=" p-3 md:p-6 md:px-10 max-w-[1600px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {CERTIFICATES_DATA.map((cert) => (
             <div
               key={cert.id}
@@ -126,7 +126,7 @@ export default function CertificatesPage() {
           ))}
 
 
-          <div className="relative w-full max-w-[540px] min-h-[380px] border-3 bg-linear-to-b  from-[#E5E9FF] via-[#f2f3fa] to-[#F8F9FF] rounded-[24px] p-7 overflow-hidden shadow-sm  border-white  font-sans flex flex-col">
+          <div className="relative w-full max-w-[540px] min-h-[380px] border-3 bg-linear-to-b  mb-20 md:mb-0  from-[#E5E9FF] via-[#f2f3fa] to-[#F8F9FF] rounded-[24px] p-7 overflow-hidden shadow-sm  border-white  font-sans flex flex-col">
       
       {/* Top Right Graphic Placeholder 
         Swap the 'src' below with your actual image path.

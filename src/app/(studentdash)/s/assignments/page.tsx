@@ -124,9 +124,21 @@ export default function AssignmentPage() {
     <div className="w-full min-h-screen bg-[#F8F9FA] font-sans">
       
       {/* --- FULL WIDTH HEADER --- */}
-      <div className="bg-white px-6 md:px-10 pt-8 border-b border-gray-200">
-        <h1 className="text-[22px] font-bold text-gray-900 mb-6">Assignments</h1>
-        
+      <div className="sticky top-0 z-20 bg-white px-4 md:px-10 pt-6 md:pt-8 border-b border-gray-200 md:static md:z-auto">
+        <h1 className="text-[22px]  font-semibold text-gray-900 mb-3">Assignments</h1>
+        {/* Search Bar */}
+        <div className=" mb-4 md:mb-6 max-w-[360px]">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
+            </div>
+            <input
+              type="text"
+              placeholder="Search by assignment, session or mentor"
+              className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-[10px] text-[13px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
+            />
+          </div>
+        </div>
         {/* Tabs */}
         <div className="flex items-center gap-8">
           <button
@@ -168,24 +180,10 @@ export default function AssignmentPage() {
       </div>
 
       {/* --- MAIN CONTENT AREA --- */}
-      <div className="p-6 md:px-10 max-w-[1600px] mx-auto mt-2">
+      <div className="p-4 md:px-10 max-w-[1600px] mx-auto mt-2">
         
-        {/* Search Bar */}
-        <div className="mb-6 max-w-[360px]">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
-            </div>
-            <input
-              type="text"
-              placeholder="Search by assignment, session or mentor"
-              className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-[10px] text-[13px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
-            />
-          </div>
-        </div>
-
         {/* Grid of Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-20 md:mb-20">
           {filteredAssignments.map((item) => {
             const styles = getColorStyles(item.colorScheme);
 

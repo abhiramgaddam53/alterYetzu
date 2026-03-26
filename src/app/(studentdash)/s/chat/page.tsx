@@ -885,6 +885,7 @@ export default function ChatPage() {
     }
   };
 
+  
   // --- DATA MAPPING FOR UI ---
   const displayContacts = educators.map(e => ({
     id: e.id || e._id || e.educatorId,
@@ -904,31 +905,57 @@ export default function ChatPage() {
   const displayMessages = messages.map((m, index, arr) => {
     const isMe = m.senderId === userId || m.sender === 'student' || m.isStudent;
     
+    const prevMsg = arr[index - 1];
     const nextMsg = arr[index + 1];
-    const isNextMe = nextMsg ? (nextMsg.senderId === userId || nextMsg.sender === 'student' || nextMsg.isStudent) : false;
-    const showAvatar = !isMe && (!nextMsg || isNextMe);
-
+    
+    const prevIsMe = prevMsg ? (prevMsg.senderId === userId || prevMsg.sender === 'student' || prevMsg.isStudent) : null;
+    const nextIsMe = nextMsg ? (nextMsg.senderId === userId || nextMsg.sender === 'student' || nextMsg.isStudent) : null;
+  
+    const isPrevSame = prevMsg && prevIsMe === isMe;
+    const isNextSame = nextMsg && nextIsMe === isMe;
+  
+    const isFirstInGroup = !isPrevSame && isNextSame;
+    const isMiddleInGroup = isPrevSame && isNextSame;
+    const isLastInGroup = isPrevSame && !isNextSame;
+    const isOnlyInGroup = !isPrevSame && !isNextSame;
+  
+    let radiusClass = "rounded-[15px]";
+if (isMe) {
+  if (isFirstInGroup) radiusClass = "rounded-[15px] rounded-br-none";
+  else if (isMiddleInGroup) radiusClass = "rounded-[15px]"; 
+  else if (isLastInGroup) radiusClass = "rounded-[15px] rounded-tr-none";
+  else if (isOnlyInGroup) radiusClass = "rounded-[15px] rounded-br-none";
+} else {
+  if (isFirstInGroup) radiusClass = "rounded-[15px] rounded-bl-none";
+  else if (isMiddleInGroup) radiusClass = "rounded-[15px]"; 
+  else if (isLastInGroup) radiusClass = "rounded-[15px] rounded-tl-none";
+  else if (isOnlyInGroup) radiusClass = "rounded-[15px] rounded-bl-none";
+}
+  
+    const showAvatar = !isMe && (!nextMsg || nextIsMe !== isMe);
+  
     let timeStr = m.time || "";
     if (m.createdAt) {
       const dateObj = new Date(m.createdAt);
       timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
-
+  
     return {
       id: m.id || m._id || `msg-${index}`,
       sender: isMe ? "me" : "them",
       text: m.content || m.text || "",
       time: timeStr,
       showAvatar: showAvatar,
+      radiusClass: radiusClass
     };
   });
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-white font-sans max-w-[1600px] mx-auto overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-80px)] bg-white font-sans  mx-auto overflow-hidden">
       
       {/* Top Header - Hidden on mobile when viewing the chat window */}
-      <div className={`bg-white px-4 md:px-10 py-3 md:border-b border-gray-100 ${!showMobileList ? 'hidden md:block' : 'block'}`}>
-        <h1 className="text-[22px] font-bold text-gray-900 mb-1 md:mb-2">
+      <div className={`bg-white px-4 md:px-10 md:py-3 md:border-b border-gray-100 ${!showMobileList ? 'hidden md:block' : 'block'}`}>
+        <h1 className="text-[22px] hidden md:block font-bold text-gray-900 mb-1 md:mb-2">
           Chat
         </h1>
         <p className="text-sm text-gray-500 hidden md:block">Engage directly with your 1:1 mentors.</p>
@@ -947,10 +974,10 @@ export default function ChatPage() {
                 setActiveContactId(contact.id);
                 setShowMobileList(false); // Switch to Chat view on mobile
               }}
-              className={`flex items-center md:items-start gap-3 p-4 cursor-pointer transition-colors border-b border-gray-100 md:border-b-0 md:border-l-4 ${
+              className={`flex items-center md:items-start gap-3 p-4 cursor-pointer transition-colors border-b border-gray-200 md:border-b-0 md:border-l-4 ${
                 activeContactId === contact.id
                   ? "md:bg-gray-50 md:border-[#042BFD]"
-                  : "border-transparent hover:bg-gray-50/50"
+                  : "  hover:bg-gray-50/50 border-b border-gray-200 "
               }`}
             >
               {/* Unread Indicator (Centered vertically on mobile, slightly top on desktop) */}
@@ -1003,7 +1030,7 @@ export default function ChatPage() {
           
           {/* Chat Header (Fixed at top) */}
           {activeContact && (
-            <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white z-10">
+            <div className="px-4 md:px-6 py-8 md:py-4 border-b border-gray-100 flex items-center justify-between shrink-0 bg-white z-10">
               <div className="flex items-center gap-3 md:gap-3">
                 {/* Mobile Back Button */}
                 <button 
@@ -1097,14 +1124,14 @@ export default function ChatPage() {
                           </div>
                         )}
                         <div
-                          className={`px-3.5 py-2 md:px-4 md:py-2.5 rounded-[18px] md:rounded-[20px] text-[14px] md:text-[15px] leading-relaxed ${
-                            msg.sender === "me"
-                              ? "bg-[#EAEBFC] text-[#111827] rounded-br-sm md:rounded-br-sm"
-                              : "bg-[#F3F4F6] text-[#111827] rounded-bl-sm md:rounded-bl-sm"
-                          }`}
-                        >
-                          {msg.text}
-                        </div>
+                              className={`px-3.5 py-2 md:px-4 md:py-2.5 text-[14px] md:text-[15px] leading-relaxed ${msg.radiusClass} ${
+                                msg.sender === "me"
+                                  ? "bg-[#EAEBFC] text-[#111827]"
+                                  : "bg-[#F3F4F6] text-[#111827]"
+                              }`}
+                            >
+                              {msg.text}
+                            </div>
                       </div>
                     </div>
                   ))}
@@ -1115,7 +1142,7 @@ export default function ChatPage() {
 
           {/* Chat Input Area (Fixed at bottom) */}
           {activeContact && (
-            <div className="p-4 md:p-6 pt-2 md:pt-2 shrink-0 bg-white z-10 border-t border-gray-50 md:border-transparent pb-safe">
+            <div className="p-4 mb-14 md:mb-0 md:p-6 pt-2 md:pt-2 shrink-0 bg-white z-10 border-t border-gray-50 md:border-transparent pb-safe">
               <div className="relative flex items-center max-w-4xl mx-auto">
                 <input
                   type="text"

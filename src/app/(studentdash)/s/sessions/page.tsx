@@ -415,6 +415,7 @@
 //     </div>
 //   );
 // }
+
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -581,20 +582,20 @@ export default function SessionsPage() {
 
           <div className="relative z-10 flex-1 flex flex-col">
             <Link href={`sessions/${session.slug}`} className="hover:underline">
-              <h3 className="text-[17px] md:text-[18px] font-bold text-gray-900 mb-5 leading-snug pr-2 line-clamp-2">
+              <h3 className="text-[16px] md:text-[18px] font-semibold text-gray-900 mb-5 leading-snug pr-2 line-clamp-2">
                 {session.title}
               </h3>
             </Link>
 
-            <div className="flex items-center gap-3 mb-6 mt-auto">
+            <div className="flex items-center gap-3 mb-3 md:mb-6 mt-auto">
               <img src={session.mentor.avatar} alt="Mentor" className="w-11 h-11 rounded-full object-cover shrink-0" />
               <div>
-                <p className="text-[14px] font-semibold text-gray-900 leading-none mb-1">{session.mentor.name}</p>
+                <p className="text-[14px] font-medium text-gray-900 leading-none mb-1">{session.mentor.name}</p>
                 <p className="text-[12px] text-gray-500 line-clamp-1">{session.mentor.role}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 bg-[#F8FAFC] rounded-[10px] px-4 py-3 mb-6 w-full border border-gray-50">
+            <div className="flex items-center gap-4 bg-[#F8FAFC] rounded-[10px] px-4 py-3 mb-3 md:mb-6 w-full border border-gray-50">
               <div className="flex items-center gap-2 text-[12px] md:text-[13px] font-medium text-gray-600">
                 <Calendar size={16} className="text-gray-400 shrink-0" /> <span className="truncate">{session.date}</span>
               </div>
@@ -668,23 +669,25 @@ export default function SessionsPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-white md:bg-[#F8F9FA] font-sans pb-24 lg:pb-8">
+    <div className="w-full   bg-white md:bg-[#F8F9FA] font-sans pb-18 lg:pb-8">
       
       {/* --- HEADER --- */}
-      <div className="bg-white pt-4 md:pt-6 md:px-10 border-b border-gray-100 md:border-gray-200">
+      <div className="sticky top-0 z-20 md:static md:z-auto bg-white pt-4 md:pt-6 md:px-10 border-b border-gray-100 md:border-gray-200">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-6 px-4 md:px-0">
-          <h1 className="text-[24px] md:text-[22px] font-bold text-gray-900">Sessions</h1>
+          <h1 className="md:text-[24px] text-[22px] font-semibold text-gray-900">Sessions</h1>
           
-          <div className="relative w-full md:w-[320px]">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
-            </div>
-            <input
-              type="text"
-              placeholder="Search by session, mentor or topic"
-              className="block w-full pl-10 pr-4 py-2.5 bg-[#F8FAFC] md:bg-white border border-transparent md:border-gray-200 rounded-xl text-[13px] md:text-[14px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all md:shadow-sm"
-            />
-          </div>
+         <div className=" mb-4 md:mb-6 max-w-[360px]">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Search className="h-4 w-4 text-gray-400" strokeWidth={2} />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search by assignment, session or mentor"
+                      className="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-[10px] text-[13px] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
         </div>
         
         {/* Tabs */}
@@ -699,7 +702,7 @@ export default function SessionsPage() {
                 onClick={() => setActiveTab(tab)}
                 className={`pb-3.5 flex items-center gap-2 border-b-2 transition-all -mb-[1px] md:-mb-[2px] capitalize whitespace-nowrap ${
                   isActive
-                    ? "border-[#042BFD] text-gray-900 font-semibold"
+                    ? "border-[#042BFD] text-gray-900 font-medium"
                     : "border-transparent text-gray-500 hover:text-gray-700 font-medium"
                 }`}
               >
@@ -746,7 +749,7 @@ export default function SessionsPage() {
             {focusTodaySessions.length > 0 && (
               <div className="mb-8">
                 <div className="flex items-center gap-4 mb-4 px-4 md:px-0">
-                  <span className="text-[11px] md:text-[12px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                  <span className="text-[12px] md:text-[12px] font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     FOCUS FOR TODAY
                   </span>
                   <div className="hidden md:block flex-1 h-px bg-gray-200"></div>
@@ -763,7 +766,7 @@ export default function SessionsPage() {
             {otherSessions.length > 0 && (
               <div>
                 <div className="flex items-center gap-4 mb-4 px-4 md:px-0">
-                  <span className="text-[11px] md:text-[12px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                  <span className="text-[12px] md:text-[12px] font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                     UPCOMING SESSIONS
                   </span>
                   <div className="hidden md:block flex-1 h-px bg-gray-200"></div>
@@ -788,9 +791,20 @@ export default function SessionsPage() {
             {filteredSessions.map((session) => renderCard(session, false))}
             
             {filteredSessions.length === 0 && (
-              <div className="w-full md:col-span-full py-20 text-center text-gray-500 px-4">
-                No sessions found in this category.
-              </div>
+               <div className="flex flex-col items-center justify-center bg-white rounded-none md:rounded-2xl md:border border-gray-100 shadow-sm py-16 px-6 min-h-[500px] w-full">
+               <div className="relative w-64 h-64 md:w-72 md:h-72 mb-8 flex items-center justify-center">
+                 <div className="absolute inset-0 bg-blue-50/50 rounded-full blur-3xl"></div>
+                 <img src="/images/empty-state.svg" alt="Learning Journey" className="relative z-10 w-full h-full object-contain" />
+               </div>
+               <h2 className="text-xl md:text-[24px] font-bold text-gray-900 mb-3 text-center">Your learning journey starts here</h2>
+               <p className="text-center text-sm text-gray-500 max-w-[550px] mb-8 leading-relaxed">
+               No upcoming sessions found.
+
+               </p>
+               <button className="bg-[#111111] hover:bg-black text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2.5 transition-colors text-[14px]">
+                 Explore Courses <ExternalLink size={16} />
+               </button>
+             </div>
             )}
           </div>
         )}

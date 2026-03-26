@@ -462,12 +462,12 @@ export default function AssignmentSlugPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white md:bg-[#F8F9FA] md:p-8 md:mt-2 font-sans pb-24 md:pb-8">
+    <div className="w-full min-h-screen bg-white md:bg-[#F8F9FA] md:p-8 md:mt-2 font-sans pb-18 md:pb-8">
       <div className="max-w-[1600px] mx-auto">
         
         {/* --- MOBILE HEADER --- */}
         <div className="flex md:hidden items-center gap-2 mb-2 px-4 pt-6">
-          <Link href="/s/assignments" className="text-gray-900 flex items-center gap-2 font-bold text-[18px]">
+          <Link href="/s/assignments" className="text-gray-900 flex items-center gap-2 font-semibold text-[16px] md:text-[18px]">
             <ArrowLeft size={20} /> Assignments
           </Link>
         </div>
@@ -490,14 +490,14 @@ export default function AssignmentSlugPage() {
         <div className="flex flex-col md:grid md:grid-cols-3 md:gap-6 bg-white md:bg-transparent">
           
           {/* ================= 1. ASSIGNMENT DETAILS (Mobile: Top, Desktop: Left) ================= */}
-          <div className="order-1 md:col-span-2 bg-white md:rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-4 md:p-8 border-b border-gray-100 md:border-none">
+          <div className="order-1 md:col-span-2 bg-white md:rounded-[24px]  *:md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-4 md:p-8 border-b border-gray-200 md:border-none">
             
             {/* Header Row with Dynamic Badge */}
             <div className="flex flex-col md:flex-row md:items-start justify-start gap-4 mb-5 md:mb-6">
-              <h1 className="text-[20px] md:text-[24px] font-bold text-gray-900 leading-snug inline-block">
+              <h1 className="text-[20px] md:text-[24px] font-semibold text-gray-900 leading-snug inline-block">
                 {ASSIGNMENT_DATA.title}
                 {/* Mobile Inline Badge */}
-                <span className={`md:hidden inline-flex ml-2 align-middle ${badge.color} text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider`}>
+                <span className={`md:hidden inline-flex ml-2 align-middle ${badge.color} text-[11px] font-semibold px-2 py-1 rounded-full uppercase tracking-wider`}>
                   {badge.text}
                 </span>
               </h1>
@@ -515,7 +515,7 @@ export default function AssignmentSlugPage() {
                 className="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover shrink-0" 
               />
               <div>
-                <h3 className="text-[14px] md:text-[15px] font-bold text-gray-900">
+                <h3 className="text-[14px] md:text-[15px] font-medium text-gray-900">
                   {ASSIGNMENT_DATA.mentor.name}
                 </h3>
                 <p className="text-[12px] md:text-[13px] text-gray-500 line-clamp-1 md:line-clamp-none">
@@ -525,20 +525,22 @@ export default function AssignmentSlugPage() {
             </div>
 
             {/* Description */}
-            <div>
-              <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 md:mb-3">
+            <div  >
+              <h4 className="text-[12px] font-normal text-gray-500 uppercase tracking-wider mb-2 md:mb-3">
                 DESCRIPTION
               </h4>
-              <p className="text-[13px] md:text-[14px] text-gray-600 leading-[1.6]">
+              <p className="text-[14px] md:text-[14px] text-gray-600 leading-[1.6]">
                 {ASSIGNMENT_DATA.description}
               </p>
             </div>
+            
           </div>
 
+         
           {/* ================= 2. RESOURCES (Mobile: Middle, Desktop: Right Top) ================= */}
           <div className="order-2 md:col-span-1 md:col-start-3 md:row-start-1 bg-white md:rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-4 md:p-8 border-b border-gray-100 md:border-none">
             <div className="flex items-center gap-3 mb-4 md:mb-6">
-              <h2 className="text-[16px] md:text-[18px] font-bold text-gray-900">Assignment Resources</h2>
+              <h2 className="text-[16px] md:text-[18px] font-medium text-gray-900">Assignment Resources</h2>
               <span className="bg-[#F1F5F9] text-gray-600 text-[11px] md:text-[12px] font-bold w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full">
                 {ASSIGNMENT_DATA.resources.length}
               </span>
@@ -551,7 +553,7 @@ export default function AssignmentSlugPage() {
                     <div className="w-10 h-10 bg-[#EEF2FF] text-[#042BFD] rounded-[10px] flex items-center justify-center text-[10px] font-bold tracking-wider shrink-0 border border-[#E0E7FF]">
                       PDF
                     </div>
-                    <h4 className="text-[13px] font-medium md:font-semibold text-gray-900 truncate">
+                    <h4 className="text-[14px] font-medium md:font-semibold text-gray-900 truncate">
                       {resource.name}
                     </h4>
                   </div>
@@ -567,7 +569,7 @@ export default function AssignmentSlugPage() {
           <div className="order-3 md:col-span-2 md:row-start-2 bg-white md:rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-4 md:p-8 border-b border-gray-100 md:border-none">
             
             <div className="flex items-center gap-2 mb-4 md:mb-6">
-              <h2 className="text-[16px] md:text-[18px] font-bold text-gray-900">
+              <h2 className="text-[16px] md:text-[18px] font-semibold text-gray-900">
                 {isSubmitted ? "Your Submissions" : (window?.innerWidth < 768 ? "Your submissions" : "Upload Your Submissions Here")}
               </h2>
               <span className="md:hidden bg-gray-100 text-gray-500 text-[11px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
@@ -639,7 +641,7 @@ export default function AssignmentSlugPage() {
                           <div className="w-11 h-11 bg-[#EEF2FF] text-[#042BFD] rounded-[12px] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0 border border-[#E0E7FF]">
                             {fileObj.file.name.endsWith('.pdf') ? 'PDF' : 'DOC'}
                           </div>
-                          <h4 className="text-[13px] md:text-[14px] font-medium text-gray-900 truncate pr-4">
+                          <h4 className="text-[14px] md:text-[14px] font-medium text-gray-900 truncate pr-4">
                             {fileObj.file.name}
                           </h4>
                         </div>
@@ -690,17 +692,17 @@ export default function AssignmentSlugPage() {
 
           {/* ================= 4. COMMENTS & MOBILE SUBMIT (Mobile: Bottom, Desktop: Right Bottom) ================= */}
           <div className="order-4 md:col-span-1 md:col-start-3 md:row-start-2 bg-white md:rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-4 md:p-8 flex flex-col h-full">
-            <h2 className="text-[16px] md:text-[18px] font-bold text-gray-900 mb-4 md:mb-6">Add Private Comment</h2>
+            <h2 className="text-[16px] md:text-[18px] font-medium text-gray-900 mb-4 md:mb-6">Add Private Comment</h2>
 
             {/* Dynamic Comments List (Only visible after submission for the mock) */}
-            <div className="flex-1 flex flex-col justify-end min-h-[50px] md:min-h-[100px] mb-4">
+            <div className="flex-1 hidden md:flex flex-col justify-end min-h-[50px] md:min-h-[100px] mb-4">
               {isSubmitted && (
                 <div className="bg-[#F8FAFC] rounded-[16px] p-4 border border-gray-100">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-[13px] font-bold text-gray-900">Natalia</span>
                     <span className="text-[11px] text-gray-400">Just now</span>
                   </div>
-                  <p className="text-[13px] text-gray-600 italic leading-relaxed">
+                  <p className="text-[14px] text-gray-600 italic leading-relaxed">
                     Submitted my assignment successfully. Let me know if revisions are needed.
                   </p>
                 </div>
@@ -719,7 +721,7 @@ export default function AssignmentSlugPage() {
                   <Send size={18} strokeWidth={2} />
                 </button>
               </div>
-              <p className="text-[10px] md:text-[11px] text-gray-400 mt-2 pl-1">
+              <p className="text-[12px] md:text-[11px] text-gray-400 mt-2 pl-1">
                 Private Comment are only visible to you and your mentor
               </p>
             </div>
@@ -729,7 +731,7 @@ export default function AssignmentSlugPage() {
               <div className="md:hidden mt-6 w-full">
                 <button 
                   onClick={handleSubmit} 
-                  className="w-full bg-[#111111] hover:bg-black text-white text-[14px] font-semibold py-3.5 rounded-xl transition-colors shadow-md"
+                  className="w-full bg-[#111111] hover:bg-black text-white text-[18px] font-normal py-3.5 rounded-xl transition-colors shadow-md"
                 >
                   Submit Assignment
                 </button>

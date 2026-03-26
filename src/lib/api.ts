@@ -6,8 +6,8 @@ const getHeaders = (token: string | null, customHeaders: Record<string, string> 
     ...customHeaders,
   };
   
-    // headers['Authorization'] = `Bearer ${token}`;
-    headers['Authorization'] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOGIwYWE1My1mNzlhLTQxZDUtODdmZi05YTM3NGJmOWZjNmYiLCJlbWFpbCI6ImFiaGlyYW10ZW1wQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzczNjU5NjkxLCJleHAiOjE3NzM3MDI4OTF9.SW34FFo5GzYmsry65FBi88r6IWqaq3QZpop-A6o0ztE`;
+    headers['Authorization'] = `Bearer ${token}`;
+    // headers['Authorization'] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOGIwYWE1My1mNzlhLTQxZDUtODdmZi05YTM3NGJmOWZjNmYiLCJlbWFpbCI6ImFiaGlyYW10ZW1wQGdtYWlsLmNvbSIsInJvbGUiOiJzdHVkZW50IiwiaWF0IjoxNzczNjU5NjkxLCJleHAiOjE3NzM3MDI4OTF9.SW34FFo5GzYmsry65FBi88r6IWqaq3QZpop-A6o0ztE`;
   
   return headers;
 };

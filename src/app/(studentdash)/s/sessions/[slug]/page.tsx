@@ -558,7 +558,7 @@ export default function SessionSlugPage() {
         
         {/* --- MOBILE HEADER --- */}
         <div className="md:hidden flex items-center gap-2 mb-6 px-4 pt-6">
-          <Link href="/s/sessions" className="text-gray-900 flex items-center gap-2 font-bold text-[18px]">
+          <Link href="/s/sessions" className="text-gray-900 flex items-center gap-2 font-semibold text-[18px]">
             <ArrowLeft size={20} />
             Sessions
           </Link>
@@ -582,7 +582,7 @@ export default function SessionSlugPage() {
             
             {/* Title & Mentor */}
             <div className="flex-1">
-              <h1 className="text-[20px] md:text-[28px] font-bold text-gray-900 leading-snug mb-4 md:mb-6 max-w-4xl">
+              <h1 className="text-[20px] md:text-[28px] font-semibold text-gray-900 leading-snug mb-4 md:mb-6 max-w-4xl">
                 {sessionData.type}: {sessionData.title}
               </h1>
               
@@ -593,7 +593,7 @@ export default function SessionSlugPage() {
                   className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0" 
                 />
                 <div>
-                  <h3 className="text-[14px] md:text-[16px] font-semibold text-gray-900 leading-snug">
+                  <h3 className="text-[14px] md:text-[16px] font-medium md:font-semibold text-gray-900 leading-snug">
                     {sessionData.mentor.name}
                   </h3>
                   <p className="text-[12px] md:text-[14px] text-gray-500">
@@ -662,25 +662,25 @@ export default function SessionSlugPage() {
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-0 md:bg-[#F8FAFC] md:rounded-[16px] md:py-6 md:border md:border-gray-50">
             <div className="bg-[#F8FAFC] md:bg-transparent rounded-[12px] md:rounded-none p-4 md:p-0 flex flex-col items-center justify-center gap-2 md:gap-3 md:border-r border-gray-200 border border-gray-50 md:border-none">
               <Calendar size={20} className="text-gray-500" strokeWidth={1.5} />
-              <span className="text-[13px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.date}</span>
+              <span className="text-[14px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.date}</span>
             </div>
             <div className="bg-[#F8FAFC] md:bg-transparent rounded-[12px] md:rounded-none p-4 md:p-0 flex flex-col items-center justify-center gap-2 md:gap-3 md:border-r border-gray-200 border border-gray-50 md:border-none">
               <Clock size={20} className="text-gray-500" strokeWidth={1.5} />
-              <span className="text-[13px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.time}</span>
+              <span className="text-[14px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.time}</span>
             </div>
             <div className="bg-[#F8FAFC] md:bg-transparent rounded-[12px] md:rounded-none p-4 md:p-0 flex flex-col items-center justify-center gap-2 md:gap-3 md:border-r border-gray-200 border border-gray-50 md:border-none">
               <Timer size={20} className="text-gray-500" strokeWidth={1.5} />
-              <span className="text-[13px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.duration}</span>
+              <span className="text-[14px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.duration}</span>
             </div>
             <div className="bg-[#F8FAFC] md:bg-transparent rounded-[12px] md:rounded-none p-4 md:p-0 flex flex-col items-center justify-center gap-2 md:gap-3 border border-gray-50 md:border-none">
               <Users size={20} className="text-gray-500" strokeWidth={1.5} />
-              <span className="text-[13px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.attendees}</span>
+              <span className="text-[14px] md:text-[15px] font-medium text-gray-700 text-center">{sessionData.stats.attendees}</span>
             </div>
           </div>
 
           {/* --- MOBILE ACTION BUTTONS (Stacked) --- */}
-          <div className="flex flex-col gap-3 mt-6 md:hidden border-b border-gray-100 pb-8">
-            <button className="w-full bg-[#111111] hover:bg-black text-white px-6 py-3.5 rounded-xl text-[14px] font-medium transition-colors shadow-sm flex items-center justify-center gap-2">
+          <div className="flex flex-col gap-3 mt-6 md:hidden border-b border-gray-300 pb-4 md:pb-8">
+            <button className="w-full bg-[#111111] hover:bg-black text-white px-6 py-3.5 rounded-xl text-[14px] transition-colors shadow-sm flex items-center justify-center gap-2">
               <img src="/images/google-video.svg" alt="Meet" className="w-5 h-5 object-contain" />
               Join Now
             </button>
@@ -705,8 +705,8 @@ export default function SessionSlugPage() {
           {/* Assignments Column */}
           <div className="bg-white rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-0 md:p-8 flex flex-col">
             <div className="flex items-center gap-2 mb-4 md:mb-6">
-              <h2 className="text-[16px] md:text-[18px] font-bold text-gray-900">Assignments</h2>
-              <span className="bg-[#F1F5F9] text-gray-600 text-[11px] md:text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full">
+              <h2 className="text-[16px] md:text-[18px] font-semibold text-gray-900">Assignments</h2>
+              <span className="bg-[#F1F5F9] text-gray-600 text-[12px] md:text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full">
                 {sessionData.assignments.length}
               </span>
             </div>
@@ -735,7 +735,7 @@ export default function SessionSlugPage() {
                   
                   {/* Mobile: Full Width | Desktop: Right Aligned */}
                   <div className="flex justify-end mt-auto w-full md:w-auto">
-                    <button className="w-full md:w-auto px-5 py-2.5 border border-gray-200 text-gray-900 font-medium text-[13px] md:text-[14px] rounded-xl hover:bg-gray-50 transition-colors">
+                    <button className="w-full md:w-auto px-5 py-2.5 border border-gray-200 text-gray-900 font-medium text-[14px] md:text-[14px] rounded-xl hover:bg-gray-50 transition-colors">
                       Open Workspace
                     </button>
                   </div>
@@ -747,7 +747,7 @@ export default function SessionSlugPage() {
           {/* Resources Column */}
           <div className="bg-white rounded-[24px] md:border border-gray-100 md:shadow-[0_2px_15px_rgba(0,0,0,0.02)] p-0 md:p-8 flex flex-col mt-4 md:mt-0">
             <div className="flex items-center gap-2 mb-4 md:mb-6">
-              <h2 className="text-[16px] md:text-[18px] font-bold text-gray-900">Resources</h2>
+              <h2 className="text-[16px] md:text-[18px] font-semibold text-gray-900">Resources</h2>
               <span className="bg-[#F1F5F9] text-gray-600 text-[11px] md:text-[12px] font-bold w-6 h-6 flex items-center justify-center rounded-full">
                 {sessionData.resources.length}
               </span>
@@ -763,7 +763,7 @@ export default function SessionSlugPage() {
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-[12px] md:rounded-[14px] bg-[#EEF2FF] text-[#042BFD] flex items-center justify-center shrink-0">
                       <span className="text-[10px] md:text-[12px] font-bold uppercase tracking-wider">PDF</span>
                     </div>
-                    <h4 className="text-[14px] md:text-[15px] font-medium text-gray-900 truncate pr-2 md:pr-4">
+                    <h4 className="text-[14px] font-medium text-gray-900 truncate pr-2 md:pr-4">
                       {resource.title}
                     </h4>
                   </div>
