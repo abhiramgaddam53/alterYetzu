@@ -478,12 +478,205 @@ export default function SessionsPage() {
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+
+const MOCK_SESSIONS = [
+  // --- FOCUS FOR TODAY ---
+  {
+    id: "1",
+    slug: "major-insights-human-nervous-system",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    badge: "STARTS IN 12 MINS",
+    badgeType: "purple",
+    tab: "upcoming",
+    isFocusToday: true,
+  },
+  {
+    id: "2",
+    slug: "1-1-mentorship-future-renewable-energy",
+    title: "1:1 Mentorship: The Future of Renewable Energy",
+    type: "mentorship",
+    mentor: {
+      name: "Dr. Mathew Thomas",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Mathew+Thomas&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "6:15 AM - 7:15 PM",
+    badge: "TODAY • 6:15 PM",
+    badgeType: "orange",
+    tab: "upcoming",
+    isFocusToday: true,
+  },
+  // --- UPCOMING SESSIONS ---
+  {
+    id: "3",
+    slug: "cohort-advanced-methods-data-viz",
+    title: "Cohort: Advanced Methods in Data Visualization",
+    type: "cohort",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "23 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
+  },
+  {
+    id: "4",
+    slug: "webinar-breakthroughs-cognitive-neuroscience",
+    title: "Webinar: Breakthroughs in Cognitive Neuroscience",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "24 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
+  },
+  {
+    id: "5",
+    slug: "1-1-mentorship-future-renewable-energy-2",
+    title: "1:1 Mentorship: The Future of Renewable Energy",
+    type: "mentorship",
+    mentor: {
+      name: "Dr. Mathew Thomas",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Mathew+Thomas&background=random",
+    },
+    date: "26 Feb, 2026",
+    time: "11:15 AM - 1:15 PM",
+    tab: "upcoming",
+    isFocusToday: false,
+  },
+  // --- COMPLETED ---
+  {
+    id: "6",
+    slug: "webinar-completed-1",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    tab: "completed",
+    isFocusToday: false,
+  },
+  {
+    id: "7",
+    slug: "webinar-completed-2",
+    title: "Webinar: Breakthroughs in Cognitive Neuroscience",
+    type: "webinar",
+    mentor: {
+      name: "Dr. Elf Manie",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Elf+Manie&background=random",
+    },
+    date: "23 Feb, 2026",
+    time: "4:15 PM - 6:15 PM",
+    tab: "completed",
+    isFocusToday: false,
+  },
+  // --- MISSED ---
+  {
+    id: "8",
+    slug: "webinar-missed-1",
+    title: "Webinar: Major Insights on Human Nervous System",
+    type: "missed", 
+    mentor: {
+      name: "Dr. Sophia Tyler",
+      role: "Associate Professor, XYZ Institute",
+      avatar: "https://ui-avatars.com/api/?name=Sophia+Tyler&background=random",
+    },
+    date: "22 Feb, 2026",
+    time: "3:00 PM - 4:30 PM",
+    tab: "missed",
+    isFocusToday: false,
+  },
+];
+
   // --- FETCH COURSES FROM API ---
+  // useEffect(() => {
+  //   const fetchSessions = async () => {
+  //     try {
+  //       const res = await CourseAPI.getAllCourses();
+  //       if (res.courses && Array.isArray(res.courses)) {
+  //         const mappedCourses = res.courses.map((course: any) => {
+  //           // Parse Dates & Times
+  //           const startDate = new Date(course.startDateTime);
+  //           const durationHours = parseInt(course.duration) || 1; 
+  //           const endDate = new Date(startDate.getTime() + durationHours * 60 * 60 * 1000);
+
+  //           // Format UI Strings
+  //           const dateStr = startDate.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  //           const formatTime = (d: Date) => d.toLocaleTimeString("en-US", { hour: 'numeric', minute: '2-digit', hour12: true });
+  //           const timeStr = `${formatTime(startDate)} - ${formatTime(endDate)}`;
+
+  //           // Tab & Focus Logic
+  //           const today = new Date();
+  //           const isToday = startDate.toDateString() === today.toDateString();
+  //           const isPast = endDate < today;
+            
+  //           let tab = "upcoming";
+  //           if (isPast) tab = "completed";
+
+  //           let badge = null;
+  //           let badgeType = "gray";
+  //           if (isToday && !isPast) {
+  //             badge = `STARTS IN 12 MINS`; // Using explicit string from UI or dynamic logic later
+  //             badgeType = "purple";
+  //           }
+
+  //           return {
+  //             id: course._id,
+  //             slug: course._id, 
+  //             title: course.title || "Untitled Session",
+  //             type: course.title?.toLowerCase().includes('cohort') ? 'cohort' : 'webinar', // dynamic fallback
+  //             mentor: {
+  //               name: "Dr. Sophia Tyler", // API doesn't return name directly yet, fallback to UI mockup name
+  //               role: course.subtitle || "Associate Professor, XYZ Institute",
+  //               avatar: `https://ui-avatars.com/api/?name=Sophia+Tyler&background=random`,
+  //             },
+  //             date: dateStr,
+  //             time: timeStr,
+  //             badge,
+  //             badgeType,
+  //             tab,
+  //             isFocusToday: isToday && !isPast,
+  //           };
+  //         });
+
+  //         setSessions(mappedCourses);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch sessions/courses:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchSessions();
+  // }, []);
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const res = await CourseAPI.getAllCourses();
-        if (res.courses && Array.isArray(res.courses)) {
+        if (res && res.courses && Array.isArray(res.courses) && res.courses.length > 0) {
           const mappedCourses = res.courses.map((course: any) => {
             // Parse Dates & Times
             const startDate = new Date(course.startDateTime);
@@ -530,9 +723,12 @@ export default function SessionsPage() {
           });
 
           setSessions(mappedCourses);
+        } else {
+          setSessions(MOCK_SESSIONS);
         }
       } catch (error) {
         console.error("Failed to fetch sessions/courses:", error);
+        setSessions(MOCK_SESSIONS);
       } finally {
         setIsLoading(false);
       }
