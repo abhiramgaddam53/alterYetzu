@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 import Checkbox from "@/components/ui/Checkbox";
 import Script from "next/script";
 import { useEffect } from "react";
-import { api } from "@/lib/axios";
+import { fetchAndSetUserProfile } from "@/lib/axios";
 import useSession from "@/hooks/useSession";
 import Cookies from "js-cookie";
 import { useGoogleLoginMutation, useLoginMutation } from "@/lib/queries/identityService/useIdentityService";
@@ -83,6 +83,7 @@ export default function LoginForm() {
             if (data?.userData && data?.userProfileData) {
               setIsUserLoggedIn(true)
               toast.success("Login successful!");
+              fetchAndSetUserProfile()
               router.push("/");
             } else {
               toast.error("Invalid credentials!");

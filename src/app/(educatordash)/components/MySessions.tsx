@@ -35,7 +35,7 @@ const MySessions: React.FC = () => {
       }
 
       try {
-        const response = await EducatorAPI.getMySessions(accessToken, user.id);
+        const response = await EducatorAPI.getMySessions( );
         if (response?.data) {
           // Map API data to calendar format
           if (response.data.sessions && Array.isArray(response.data.sessions)) {

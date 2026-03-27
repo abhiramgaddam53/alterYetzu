@@ -315,7 +315,7 @@ const AssignmentsPage: React.FC = () => {
     }
 
     try {
-      const response = await EducatorAPI.getAssignments(accessToken, user.id);
+      const response = await EducatorAPI.getAssignments( );
       if (response?.data && Array.isArray(response.data)) {
         const mappedAssignments = response.data.map((item: any) => ({
           id: item.id || item._id,

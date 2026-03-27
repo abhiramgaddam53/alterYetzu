@@ -1,10 +1,10 @@
+// axios.ts
+
 import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://productionyetzuapi.yetzu.com';
 
-// 🔹 Public Axios instance (no auth)
 export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -12,7 +12,6 @@ export const api = axios.create({
   },
 });
 
-// 🔹 Authenticated Axios instance
 export const authApi = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -20,11 +19,29 @@ export const authApi = axios.create({
   },
 });
 
+ export const fetchAndSetUserProfile = async () => {
+  try {
+    const { data } = await authApi.get('/api/identityapi/v1/auth/me');
+    if (data?.user?.id) {
+      Cookies.set("userId", data.user.id, { secure: true, sameSite: "strict" });
+    }
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch user profile", error);
+    throw error;
+  }
+};
+
 authApi.interceptors.request.use(async (config) => {
   const jwtToken = Cookies.get("jwtToken");
+  const userId = Cookies.get("userId");
 
   if (jwtToken && config.headers) {
     config.headers.Authorization = `Bearer ${jwtToken}`;
+  }
+  
+  if (userId && config.headers) {
+    config.headers['x-user-id'] = userId;
   }
 
   return config;
@@ -64,6 +81,7 @@ authApi.interceptors.response.use(
         Cookies.remove("jwtToken");
         Cookies.remove("refreshToken");
         Cookies.remove("isUserLoggedIn");
+        Cookies.remove("userId");
 
         if (typeof window !== "undefined") {
           window.location.href = "/login";

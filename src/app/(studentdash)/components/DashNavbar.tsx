@@ -812,7 +812,7 @@ export default function DashNavbar({
         const userId = localStorage.getItem("userId") || "b8b0aa53-f79a-41d5-87ff-9a374bf9fc6f";
 
         if (token && userId) {
-          const overviewRes = await StudentAPI.getOverview(token, userId);
+          const overviewRes = await StudentAPI.getOverview( );
           if (overviewRes?.success && overviewRes?.data?.userInfo) {
             const userInfo = overviewRes.data.userInfo;
             setFormData({
@@ -823,7 +823,7 @@ export default function DashNavbar({
             setPaymentData(prev => ({ ...prev, cardHolder: userInfo.name || "" }));
           }
 
-          const notifRes = await StudentAPI.getNotifications(token, userId);
+          const notifRes = await StudentAPI.getNotifications( );
           if (notifRes?.success) {
             setNotifications(notifRes.data.notifications || []);
             setUnreadCount(notifRes.data.summary?.newMessages || 0);
@@ -842,7 +842,7 @@ export default function DashNavbar({
     try {
       const token = localStorage.getItem("token") || "";
       const userId = localStorage.getItem("userId") || "";
-      const response = await StudentAPI.editProfile(token, userId, {
+      const response = await StudentAPI.editProfile(  {
         name: formData.fullName,
         email: formData.email,
         mobileno: formData.phone

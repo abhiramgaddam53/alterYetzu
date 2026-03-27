@@ -955,19 +955,13 @@ export default function OverviewPage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = localStorage.getItem("token") || "";
-        const userId = localStorage.getItem("userId") || "";
-
-        if (token && userId) {
-          const response = await StudentAPI.getOverview(token, userId);
-          if (response.success) {
-            setApiData(response.data);
-          } else {
-            setApiData(MOCK_DASHBOARD_DATA);
-          }
+         
+        const response = await StudentAPI.getOverview( );
+        if (response.success) {
+          setApiData(response.data);
         } else {
           setApiData(MOCK_DASHBOARD_DATA);
-        }
+        }       
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
         setApiData(MOCK_DASHBOARD_DATA);

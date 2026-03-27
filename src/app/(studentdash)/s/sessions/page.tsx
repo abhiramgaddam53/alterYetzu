@@ -611,72 +611,11 @@ const MOCK_SESSIONS = [
 ];
 
   // --- FETCH COURSES FROM API ---
-  // useEffect(() => {
-  //   const fetchSessions = async () => {
-  //     try {
-  //       const res = await CourseAPI.getAllCourses();
-  //       if (res.courses && Array.isArray(res.courses)) {
-  //         const mappedCourses = res.courses.map((course: any) => {
-  //           // Parse Dates & Times
-  //           const startDate = new Date(course.startDateTime);
-  //           const durationHours = parseInt(course.duration) || 1; 
-  //           const endDate = new Date(startDate.getTime() + durationHours * 60 * 60 * 1000);
-
-  //           // Format UI Strings
-  //           const dateStr = startDate.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  //           const formatTime = (d: Date) => d.toLocaleTimeString("en-US", { hour: 'numeric', minute: '2-digit', hour12: true });
-  //           const timeStr = `${formatTime(startDate)} - ${formatTime(endDate)}`;
-
-  //           // Tab & Focus Logic
-  //           const today = new Date();
-  //           const isToday = startDate.toDateString() === today.toDateString();
-  //           const isPast = endDate < today;
-            
-  //           let tab = "upcoming";
-  //           if (isPast) tab = "completed";
-
-  //           let badge = null;
-  //           let badgeType = "gray";
-  //           if (isToday && !isPast) {
-  //             badge = `STARTS IN 12 MINS`; // Using explicit string from UI or dynamic logic later
-  //             badgeType = "purple";
-  //           }
-
-  //           return {
-  //             id: course._id,
-  //             slug: course._id, 
-  //             title: course.title || "Untitled Session",
-  //             type: course.title?.toLowerCase().includes('cohort') ? 'cohort' : 'webinar', // dynamic fallback
-  //             mentor: {
-  //               name: "Dr. Sophia Tyler", // API doesn't return name directly yet, fallback to UI mockup name
-  //               role: course.subtitle || "Associate Professor, XYZ Institute",
-  //               avatar: `https://ui-avatars.com/api/?name=Sophia+Tyler&background=random`,
-  //             },
-  //             date: dateStr,
-  //             time: timeStr,
-  //             badge,
-  //             badgeType,
-  //             tab,
-  //             isFocusToday: isToday && !isPast,
-  //           };
-  //         });
-
-  //         setSessions(mappedCourses);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch sessions/courses:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchSessions();
-  // }, []);
   useEffect(() => {
     const fetchSessions = async () => {
       try {
         const res = await CourseAPI.getAllCourses();
-        if (res && res.courses && Array.isArray(res.courses) && res.courses.length > 0) {
+        if (res.courses && Array.isArray(res.courses)) {
           const mappedCourses = res.courses.map((course: any) => {
             // Parse Dates & Times
             const startDate = new Date(course.startDateTime);
@@ -723,20 +662,81 @@ const MOCK_SESSIONS = [
           });
 
           setSessions(mappedCourses);
-        } else {
-          setSessions(MOCK_SESSIONS);
         }
       } catch (error) {
         console.error("Failed to fetch sessions/courses:", error);
-        setSessions(MOCK_SESSIONS);
       } finally {
         setIsLoading(false);
-        setSessions(MOCK_SESSIONS);
       }
     };
 
     fetchSessions();
   }, []);
+  // useEffect(() => {
+  //   const fetchSessions = async () => {
+  //     try {
+  //       const res = await CourseAPI.getAllCourses();
+  //       if (res && res.courses && Array.isArray(res.courses) && res.courses.length > 0) {
+  //         const mappedCourses = res.courses.map((course: any) => {
+  //           // Parse Dates & Times
+  //           const startDate = new Date(course.startDateTime);
+  //           const durationHours = parseInt(course.duration) || 1; 
+  //           const endDate = new Date(startDate.getTime() + durationHours * 60 * 60 * 1000);
+
+  //           // Format UI Strings
+  //           const dateStr = startDate.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  //           const formatTime = (d: Date) => d.toLocaleTimeString("en-US", { hour: 'numeric', minute: '2-digit', hour12: true });
+  //           const timeStr = `${formatTime(startDate)} - ${formatTime(endDate)}`;
+
+  //           // Tab & Focus Logic
+  //           const today = new Date();
+  //           const isToday = startDate.toDateString() === today.toDateString();
+  //           const isPast = endDate < today;
+            
+  //           let tab = "upcoming";
+  //           if (isPast) tab = "completed";
+
+  //           let badge = null;
+  //           let badgeType = "gray";
+  //           if (isToday && !isPast) {
+  //             badge = `STARTS IN 12 MINS`; // Using explicit string from UI or dynamic logic later
+  //             badgeType = "purple";
+  //           }
+
+  //           return {
+  //             id: course._id,
+  //             slug: course._id, 
+  //             title: course.title || "Untitled Session",
+  //             type: course.title?.toLowerCase().includes('cohort') ? 'cohort' : 'webinar', // dynamic fallback
+  //             mentor: {
+  //               name: "Dr. Sophia Tyler", // API doesn't return name directly yet, fallback to UI mockup name
+  //               role: course.subtitle || "Associate Professor, XYZ Institute",
+  //               avatar: `https://ui-avatars.com/api/?name=Sophia+Tyler&background=random`,
+  //             },
+  //             date: dateStr,
+  //             time: timeStr,
+  //             badge,
+  //             badgeType,
+  //             tab,
+  //             isFocusToday: isToday && !isPast,
+  //           };
+  //         });
+
+  //         setSessions(mappedCourses);
+  //       } else {
+  //         setSessions(MOCK_SESSIONS);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch sessions/courses:", error);
+  //       setSessions(MOCK_SESSIONS);
+  //     } finally {
+  //       setIsLoading(false);
+  //       setSessions(MOCK_SESSIONS);
+  //     }
+  //   };
+
+  //   fetchSessions();
+  // }, []);
 
   // Filter Logic
   const filteredSessions = sessions.filter((s) => s.tab === activeTab);
@@ -987,8 +987,12 @@ const MOCK_SESSIONS = [
           <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-0 pb-4 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {filteredSessions.map((session) => renderCard(session, false))}
             
-            {filteredSessions.length === 0 && (
-               <div className="flex flex-col items-center justify-center bg-white rounded-none md:rounded-2xl md:border border-gray-100 shadow-sm py-16 px-6 min-h-[500px] w-full">
+            {filteredSessions.length === 0 && ( < >
+              <p className=" hidden md:block py-20 text-center text-gray-500 px-4">
+               No upcoming sessions found.
+
+               </p>
+               <div className=" md:hidden flex flex-col items-center justify-center bg-white rounded-none md:rounded-2xl md:border border-gray-100 shadow-sm py-16 px-6 min-h-[500px] w-full">
                <div className="relative w-64 h-64 md:w-72 md:h-72 mb-8 flex items-center justify-center">
                  <div className="absolute inset-0 bg-blue-50/50 rounded-full blur-3xl"></div>
                  <img src="/images/empty-state.svg" alt="Learning Journey" className="relative z-10 w-full h-full object-contain" />
@@ -1001,7 +1005,7 @@ const MOCK_SESSIONS = [
                <button className="bg-[#111111] hover:bg-black text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2.5 transition-colors text-[14px]">
                  Explore Courses <ExternalLink size={16} />
                </button>
-             </div>
+             </div></>
             )}
           </div>
         )}

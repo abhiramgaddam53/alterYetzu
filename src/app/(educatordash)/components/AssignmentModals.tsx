@@ -68,7 +68,7 @@ export const CreateAssignmentModal: React.FC<ModalProps> = ({
         formData.append("file", file);
       }
 
-      await EducatorAPI.createAssignment(accessToken, user.id, formData);
+      await EducatorAPI.createAssignment(  formData);
       toast.success("Assignment created successfully!");
       onSuccess?.();
       onClose();

@@ -37,7 +37,7 @@ const StatsGrid: React.FC = () => {
       }
       
       try {
-        const response = await EducatorAPI.getOverview(accessToken, user.id);
+        const response = await EducatorAPI.getOverview( );
         if (response?.data) {
           const data = response.data;
           setStatsData([
