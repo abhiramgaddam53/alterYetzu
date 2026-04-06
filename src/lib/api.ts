@@ -293,8 +293,9 @@
 // api.ts
 
 import Cookies from "js-cookie";
+import { getApiBaseUrl } from "@/lib/getApiBaseUrl";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://productionyetzuapi.yetzu.com';
+const BASE_URL = getApiBaseUrl();
 
 const getHeaders = (customHeaders: Record<string, string> = {}) => {
   const token = Cookies.get("jwtToken");

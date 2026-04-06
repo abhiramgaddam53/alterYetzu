@@ -2,8 +2,9 @@
 
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { getApiBaseUrl } from "@/lib/getApiBaseUrl";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://productionyetzuapi.yetzu.com';
+const BASE_URL = getApiBaseUrl();
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -40,9 +41,9 @@ authApi.interceptors.request.use(async (config) => {
     config.headers.Authorization = `Bearer ${jwtToken}`;
   }
   
-  if (userId && config.headers) {
-    config.headers['x-user-id'] = userId;
-  }
+  // if (userId && config.headers) {
+  //   config.headers['x-user-id'] = userId;
+  // }
 
   return config;
 });
@@ -60,7 +61,7 @@ authApi.interceptors.response.use(
       try {
         if (!refreshToken) throw new Error("No refresh token available");
 
-        const { data } = await api.post("/identityapi/v1/auth/refresh", {
+        const { data } = await api.post("/api/identityapi/v1/auth/refresh", {
           refreshToken,
         });
 
